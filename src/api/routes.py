@@ -71,4 +71,3 @@ def login():
     access_token = create_access_token(identity=user_id)
 
     return jsonify({"access_token":access_token, "msg": "Success" }),200
-
