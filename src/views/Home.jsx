@@ -11,7 +11,6 @@ const Home = () => {
 
 
             <div className={style.main}>
-                hfhfh
                 <div className={style.main__container}>
                     <div className={style.main__content}>
                         <h1>NEXT GENERATION GYM</h1>
