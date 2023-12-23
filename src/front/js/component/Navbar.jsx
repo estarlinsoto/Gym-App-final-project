@@ -15,18 +15,19 @@ export const Navbar = () => {
                         <span className={style.bar}></span>
                     </div>
                     <ul className={style.navbar__menu}>
-                        <li className={style.navbar__item}>
-                            <a href="/" className={style.navbar__links}>Home</a>
-                        </li>
                         <li className={style.nabvar__item}>
                             <a href="/routines.html" className={style.navbar__links}>Routines</a>
                         </li>
                         <li className={style.navbar__item}>
                             <a href="/diets.html" className={style.navbar__links}>Diets</a>
                         </li>
+                        <li className={style.navbar__lgnBtn}>
+                            <a href="/login" className={style.loginBtn}>Login</a>
+                        </li>
                         <li className={style.nabvar__btn}>
                             <a href="/" className={style.button}>Sign Up</a>
                         </li>
+                        
                     </ul>
                 </div>
             </nav>

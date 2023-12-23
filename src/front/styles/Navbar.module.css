@@ -84,6 +84,14 @@
     padding: 0 1rem;
     width: 100%;
  }
+
+ /* .navbar__lgnBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    width: 100%;
+ } */
  
  
  .button {
@@ -100,9 +108,29 @@
     background: #f77062;
     color: #000000;
  }
+
+ .loginBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    height: 100%;
+    width: 80%;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    background: #cd4030;
+    color: #000000;
+ }
  
  
  .button:hover {
+    background: #37f5ff;
+    transition: all 0.3s ease;
+ }
+
+ .loginBtn:hover {
     background: #37f5ff;
     transition: all 0.3s ease;
  }
@@ -110,7 +138,7 @@
  
  .navbar__links:hover {
     color: #f77062;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
  }
  
  
@@ -190,6 +218,10 @@
     .navbar__btn {
         padding-bottom: 2rem;
     }
+
+    .navbar__lgnBtn {
+        padding-bottom: 2rem;
+    }
  
  
     .button {
@@ -200,6 +232,15 @@
         height: 80px;
         margin: 0;
     }
+
+    /* .loginBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 80px;
+        margin: 0;
+    } */
  
  
     .navbar__toggle .bar {
