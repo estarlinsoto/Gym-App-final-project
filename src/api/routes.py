@@ -43,7 +43,7 @@ def create_one_user():
         "password" : body["password"]
         }
 
-    return jsonify({"msg": "user created succesfull", "user_added": ok_to_share }), 200
+    return jsonify({"msg": "success", "user_added": ok_to_share }), 200
 
 @api.route("/login", methods=["POST"])
 
