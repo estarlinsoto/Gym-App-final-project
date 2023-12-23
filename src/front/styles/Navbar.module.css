@@ -84,14 +84,6 @@
     padding: 0 1rem;
     width: 100%;
  }
-
- /* .navbar__lgnBtn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 1rem;
-    width: 100%;
- } */
  
  
  .button {
@@ -233,14 +225,14 @@
         margin: 0;
     }
 
-    /* .loginBtn {
+    .loginBtn {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 100%;
         height: 80px;
         margin: 0;
-    } */
+    }
  
  
     .navbar__toggle .bar {
