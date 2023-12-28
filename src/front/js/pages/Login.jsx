@@ -8,6 +8,8 @@ export const Login = () => {
     const navigate = useNavigate();
     const [userEmail, setUserEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    
     const handleClick = () => {
         actions.logIn(userEmail, password)        
     }
@@ -15,9 +17,8 @@ export const Login = () => {
     useEffect(() => {
         if (store.loginRes == "Success") {
             navigate('/user')            
-        }       
-
-    }, [store.loginRes.length])
+        }
+    }, [store.loginRes])
 
     return (    
         <div className='container-fluid'>
