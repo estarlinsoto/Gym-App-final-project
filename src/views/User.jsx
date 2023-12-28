@@ -3,6 +3,7 @@ import style from '../../src/front/styles/User.module.css'
 import { Link } from 'react-router-dom';
 
 
+
 const User = () => {
     return (
 
@@ -13,6 +14,7 @@ const User = () => {
 
             <div className={style.main}>
                 <div className={style.main__container}>
+                    
                     <div className={style.main__content}>
                         <h1>Get In Action Now</h1>
                         <h2></h2>
@@ -20,9 +22,8 @@ const User = () => {
 
                     </div>
                     <div className={style.main__img__container}>
-                        <video controls autoPlay className={style.main__video__container}>
-                            <source src="https://player.vimeo.com/external/456109483.sd.mp4?s=d7a63dff668ee01dc30fff844811fc751df40e5f&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
-                            Tu navegador no admite el elemento de video.
+                        <video autoPlay loop muted playsInline className={style.main__video__container}>
+                            <source src="https://player.vimeo.com/external/456109483.sd.mp4?s=d7a63dff668ee01dc30fff844811fc751df40e5f&profile_id=165&oauth2_token_id=57447761" />
                         </video>
                     </div>
 
