@@ -4,6 +4,7 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import Home  from "../../views/Home.jsx";
+import User  from "../../views/User.jsx";
 import injectContext from "./store/appContext";
 import { Navbar } from "./component/Navbar.jsx";
 import { Footer } from "./component/footer";
@@ -25,7 +26,8 @@ const Layout = () => {
                 <ScrollToTop>
                     <Navbar />
                     <Routes>
-                        <Route element={<Home />} path="/" />                        
+                        <Route element={<Home />} path="/home" />
+                        <Route element={<User />} path="/user" />                        
                         <Route element={<Login />} path="/login" />                        
                         <Route element={<SignUp />} path="/signup" />
                         <Route element={<h1>Not found!</h1>} path="/*"  />
