@@ -8,10 +8,7 @@ const User = () => {
     return (
 
 
-        <div>
-
-
-
+        <user className="">
             <div className={style.main}>
                 <div className={style.main__container}>
                     
@@ -54,9 +51,8 @@ const User = () => {
                     </div>
                 </div>
             </div>
-        </div >
+        </user >
     )
 }
-
 
 export default User
