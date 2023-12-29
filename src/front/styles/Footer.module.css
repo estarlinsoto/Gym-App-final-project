@@ -46,7 +46,7 @@
     align-items: flex-start;
     margin: 16px;
     text-align: left;
-    width: 160px;
+    width: 200px;
     box-sizing: border-box;
 }
 
@@ -61,14 +61,14 @@
 }
 
 .footer__link__items a {
-    color: rgb(248, 203, 203);
+    color: rgb(255, 156, 156);
     text-decoration: none;
     margin-bottom: 0.5rem;
 }
 
 .footer__link__items a:hover {
-    color: #5a9de0;
-    transition: 0.3s ease-out;
+    color: #3a98f6;
+    transition: 0.15s ease-out;
 }
 
 /* Social Icons */
