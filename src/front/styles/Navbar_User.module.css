@@ -47,7 +47,9 @@
     font-size: 3rem;
  }
  
- 
+ .link {
+    text-decoration: none;
+ }
  /* .fa-gem {
     margin-right: 0.5rem;
  } */
@@ -211,9 +213,9 @@
         padding-bottom: 2rem;
     }
 
-    .navbar__lgnBtn {
+    /* .navbar__lgnBtn {
         padding-bottom: 2rem;
-    }
+    } */
  
  
     .button {
@@ -255,4 +257,3 @@
         transform: translateY(-8px) rotate(-45deg);
             }
  }
- 

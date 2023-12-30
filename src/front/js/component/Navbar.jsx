@@ -11,7 +11,7 @@ export const Navbar = () => {
         <div>
             <nav className={style.navbar}>
                 <div className={style.navbar__container}>
-                    <a href="/" id={style.navbar__logo}><i className="fa-solid fa-dumbbell"></i>__GYMApp</a>
+                    <a href="/" id={style.navbar__logo}><i className="fa-solid fa-dumbbell"></i>_GYMApp</a>
                     <div className={style.navbar__toggle} id={style.mobile_menu}>
                         <span className={style.bar}></span>
                         <span className={style.bar}></span>
