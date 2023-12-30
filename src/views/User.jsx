@@ -28,8 +28,6 @@ const User = () => {
 
                     </div>
                 </div>
-
-
                 <div className={style.services}>
                     <h1>Get Your Best Results Now</h1>
                     <div className={style.services__container}>

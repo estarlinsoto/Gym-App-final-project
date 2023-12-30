@@ -11,7 +11,9 @@ export const Navbar_User = () => {
         <div>
             <nav className={style.navbar}>
                 <div className={style.navbar__container}>
-                    <a href="/" id={style.navbar__logo}><i className="fa-solid fa-dumbbell"></i>__GYMApp</a>
+                    <Link to="/user" className={style.link}>
+                        <a id={style.navbar__logo}><i className="fa-solid fa-dumbbell"></i>_GYMApp</a>
+                    </Link>
                     <div className={style.navbar__toggle} id={style.mobile_menu}>
                         <span className={style.bar}></span>
                         <span className={style.bar}></span>
@@ -19,18 +21,25 @@ export const Navbar_User = () => {
                     </div>
                     <ul className={style.navbar__menu}>
                         <li className={style.nabvar__item}>
-                            <a href="/routines.html" className={style.navbar__links}>Routines</a>
+                            <Link to="/user/routines" className={style.link}>
+                                <a className={style.navbar__links}>Routines</a>
+                            </Link>
                         </li>
                         <li className={style.navbar__item}>
-                            <a href="/diets.html" className={style.navbar__links}>Diets</a>
+                            <Link to="/user/diets" className={style.link}>
+                                <a className={style.navbar__links}>Diets</a>
+                            </Link>
                         </li>
-                        <li className={style.navbar__lgnBtn}>
-                            <a href="/login" className={style.loginBtn}>Login</a>
+                        <li className={style.item}>
+                            <Link to="/user/progress" className={style.link}>
+                                <a className={style.navbar__links}>Progress</a>
+                            </Link>
                         </li>
-                        <li className={style.nabvar__btn}>
-                            <button href="/" className={style.button} onClick={()=> navigate('/signup')} >Sign Up</button>
-                        </li>
-                        
+                        <Link to="/home" className={style.link}>
+                            <li className={style.nabvar__btn}>
+                                <button href="/" className={style.button} onClick={() => navigate('/home')} >Logout</button>
+                            </li>
+                        </Link>
                     </ul>
                 </div>
             </nav>
