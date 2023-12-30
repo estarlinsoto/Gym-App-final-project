@@ -1,10 +1,13 @@
 import React from 'react'
 import style from '../../src/front/styles/Home.module.css'
+import {Navbar} from '../front/js/component/Navbar.jsx'
 
 
 const Home = () => {
     return (
 
+        <div>
+        <Navbar />
         
         <home className= "">
             <div className={style.main}>
@@ -45,6 +48,7 @@ const Home = () => {
                 </div>
             </div>
         </home>
+        </div>
     )
 }
 
