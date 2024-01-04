@@ -99,3 +99,8 @@ h1 {
     -moz-text-fill-color: transparent;
     margin-top: 50px;
 }
+
+.msg {
+    color: white;
+    margin-bottom: 50px;
+}

@@ -27,7 +27,7 @@ export const SignUp = () => {
         emailInput = emailInput.toLocaleLowerCase()
 
         if (password.length < 6 || !emailInput.includes("@gmail.com") || emailInput.length < 11 || lastName.length < 3 || firstName.length < 3) {
-            setMsg("the password or the email not meets the registration requirements.")
+            setMsg("The password or email does not meet the registration requirements.")
 
         } else {
 
@@ -64,7 +64,7 @@ export const SignUp = () => {
                 </Link>
                 <h1>Sign Up Now</h1>
 
-                {msg.length === 0 ? "" : <div role="alert">{msg}</div>}
+                {msg.length === 0 ? "" : <div className={style.msg} role="alert">{msg}</div>}
 
                 <div className={style.custom_form_item}>
                     <label className={style.custom_label} htmlFor="firstName">First Name</label>
@@ -91,7 +91,7 @@ export const SignUp = () => {
                 <div className={style.warning_message}>
                     <h5>Requirements for registration:</h5>
                     <p><b>Password must be a minimum length of 6</b></p>
-                    <p><b>We only accept Gmail</b></p>
+                    <h3><b>Only "GMAIL" Accounts Accepted For Registration</b></h3>
                 </div>
             </div>
         </div>
