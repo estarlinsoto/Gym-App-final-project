@@ -85,4 +85,19 @@ def get_user_by_id(id):
             'pathologies' : user.pathologies
         }), 200
     else: 
-        return jsonify({'error': 'User not found'}) 
+        return jsonify({'error': 'User not found'})
+
+@api.route('/users', methods=['GET'])
+def show_users():    
+    users = User.query.all()
+    if users:
+        user_list = [{'id': user.id, 
+                'email': user.email, 
+                'first name': user.first_name, 
+                'last name': user.last_name,
+                'date of birth': user.date_of_birth,
+                'pathologies' : user.pathologies 
+        } for user in users]
+        return jsonify(user_list), 200
+    else:
+        return jsonify({'error': 'No se encontro usuarios'}), 400
