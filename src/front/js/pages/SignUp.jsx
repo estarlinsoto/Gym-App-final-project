@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import { Link, Routes, Route, useNavigate } from "react-router-dom"
+import style from '../../styles/SignUp.module.css'
 
 
 export const SignUp = () => {
@@ -53,49 +54,46 @@ export const SignUp = () => {
 
 
     return (
-        <div className="text-center mt-5">
 
-            <Link to={'/'}>
-                <h4>Home Page</h4>
-            </Link>
-            {
-                <div>
-                    <h1>Sing Up</h1>
+        <div className={style.custom_container}>
 
-                    {msg.length == 0 ? ""
-                        : <div class="alert alert-danger" role="alert">{msg}</div>}
+            <div className={style.custom_form_container}>
 
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control" id="floatingInput" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} ></input>
-                        <label for="floatingPassword">First Name</label>
-                    </div>
+                <Link to={'/'} className={style.link}>
+                    <h4><i class="fa-solid fa-dumbbell"></i>_GYMApp</h4>
+                </Link>
+                <h1>Sign Up Now</h1>
 
-                    <div className="form-floating mb-3">
-                        <input type="text" className="form-control" id="floatingInput" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} ></input>
-                        <label for="floatingPassword">Last Name</label>
-                    </div>
+                {msg.length === 0 ? "" : <div role="alert">{msg}</div>}
 
-                    <div className="form-floating mb-3">
-                        <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required ></input>
-                        <label for="floatingInput">Email address</label>
-                    </div>
-
-                    <div className="form-floating mb-3">
-                        <input type="password" className="form-control" id="floatingPassword" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} ></input>
-                        <label for="floatingPassword">Password</label>
-                    </div>
-
-                    <button type="button" className="btn btn-success w-25 py-2 m-3" onClick={() => sendForm()}>Click me for sing up!!</button>
-
-                    <div>
-                        <h5>requirements for registration:</h5>
-                        <p><b>password must be minimum length of 6</b></p>
-                        <p><b>we only accept Gmail</b></p>
-                    </div>
+                <div className={style.custom_form_item}>
+                    <label className={style.custom_label} htmlFor="firstName">First Name</label>
+                    <input type="text" className={style.custom_input} id="firstName" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
 
+                <div className={style.custom_form_item}>
+                    <label className={style.custom_label} htmlFor="lastName">Last Name</label>
+                    <input type="text" className={style.custom_input} id="lastName" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                </div>
 
-            }
+                <div className={style.custom_form_item}>
+                    <label className={style.custom_label} htmlFor="email">Email address</label>
+                    <input type="email" className={style.custom_input} id="email" placeholder="example@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                </div>
+
+                <div className={style.custom_form_item}>
+                    <label className={style.custom_label} htmlFor="password">Password</label>
+                    <input type="password" className={style.custom_input} id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </div>
+
+                <button type="button" className={style.custom_btn} onClick={() => sendForm()}>Click here to sign up now!</button>
+
+                <div className={style.warning_message}>
+                    <h5>Requirements for registration:</h5>
+                    <p><b>Password must be a minimum length of 6</b></p>
+                    <p><b>We only accept Gmail</b></p>
+                </div>
+            </div>
         </div>
     );
 };
