@@ -71,7 +71,7 @@ def login():
     access_token = create_access_token(identity=user_id)
     return jsonify({"access_token":access_token, "msg": "Success" }),200
 
-@api.route('/user/<int:id>', methods=['GET'])
+@api.route('/user/<int:id>')
 def get_user_by_id(id):
     user = User.query.get(id)
     
@@ -101,3 +101,13 @@ def show_users():
         return jsonify(user_list), 200
     else:
         return jsonify({'error': 'No se encontro usuarios'}), 400
+    
+@api.route('/user/<int:id>', methods=['DELETE'])
+def delete_user_id(id):
+    user = User.query.get_or_404(int(id))
+    if user:
+        db.session.delete(user)
+        db.session.commit()        
+        return jsonify({'message': 'User deleted'}), 200              
+    else:
+        return jsonify({'error': 'User not found to delete'}), 400
