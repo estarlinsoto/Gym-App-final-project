@@ -66,8 +66,23 @@ def login():
     if not true_or_false:
         return jsonify({"msg": "Wrong password"}),400
 
-    user_id = existing_user.id
+    user_id = existing_user.id    
 
     access_token = create_access_token(identity=user_id)
-
     return jsonify({"access_token":access_token, "msg": "Success" }),200
+
+@api.route('/user/<int:id>', methods=['GET'])
+def get_user_by_id(id):
+    user = User.query.get(id)
+    
+    if user:
+        return jsonify({
+            'id': user.id, 
+            'email': user.email, 
+            'first name': user.first_name, 
+            'last name': user.last_name,
+            'date of birth': user.date_of_birth,
+            'pathologies' : user.pathologies
+        }), 200
+    else: 
+        return jsonify({'error': 'User not found'}) 
