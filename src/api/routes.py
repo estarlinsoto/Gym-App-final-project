@@ -111,3 +111,31 @@ def delete_user_id(id):
         return jsonify({'message': 'User deleted'}), 200              
     else:
         return jsonify({'error': 'User not found to delete'}), 400
+    
+@api.route('/user/<int:id>', methods=['PUT'])
+def update_user(id):
+    user = User.query.get(id)
+    if user:
+        new_date_user = request.json
+        if 'first_name' in new_date_user:
+            user.first_name = new_date_user['first_name']
+        if 'last_name' in new_date_user:
+            user.last_name = new_date_user['last_name']
+        if 'email' in new_date_user:
+            user.email = new_date_user['email']
+        if 'date_of_birth' in new_date_user:
+            user.date_of_birth = new_date_user['date_of_birth']
+        if 'pathologies' in new_date_user:
+            user.pathologies = new_date_user['pathologies']
+
+        db.session.commit()
+        return jsonify({
+            'first_name': user.first_name,
+            'last_name' :user.last_name,
+            'email': user.email,
+            'date_of_birth': user.date_of_birth,
+            'pathologies': user.pathologies,
+            'id': user.id
+        }), 200
+    else:
+        return jsonify({'error': 'User not found'})
