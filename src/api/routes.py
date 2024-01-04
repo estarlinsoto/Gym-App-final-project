@@ -101,3 +101,13 @@ def show_users():
         return jsonify(user_list), 200
     else:
         return jsonify({'error': 'No se encontro usuarios'}), 400
+    
+@app.route('/users/<int:id>', methods=['DELETE'])
+def delete_user_id(id):
+    user = User.query.get(id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()        
+        return jsonify({'message': 'User deleted'}), 200              
+    else:
+        return jsonify({'error': 'User not found to delete'}), 400
