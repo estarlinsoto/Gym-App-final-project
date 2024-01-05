@@ -10,7 +10,7 @@ export const SignUp = () => {
 
     useEffect(() => {
         if (store.newUserRes == "success") {
-            navigate('/')
+            navigate('/login')
         }
         setMsg(store.newUserRes)
 

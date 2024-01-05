@@ -71,7 +71,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Create user function error==", error)
 				}
 
-			}
+			},
+
+			getUser: async () => {
+				try {
+
+				} catch (error) {
+					console.log(e)
+				}
+			},
 
 		}
 	};
