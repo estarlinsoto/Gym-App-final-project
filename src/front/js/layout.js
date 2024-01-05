@@ -5,6 +5,7 @@ import { BackendURL } from "./component/backendURL";
 
 import Home  from "../../views/Home.jsx";
 import User  from "../../views/User.jsx";
+import Admin  from "../../views/Admin.jsx";
 import injectContext from "./store/appContext";
 import { Footer } from "./component/Footer.jsx";
 import { Login } from "./pages/Login.jsx";
@@ -29,6 +30,7 @@ const Layout = () => {
                         <Route element={<User />} path="/user" />                        
                         <Route element={<Login />} path="/login" />                        
                         <Route element={<SignUp />} path="/signup" />
+                        <Route element={<Admin />} path="/admin" />
                         <Route element={<h1>Not found!</h1>} path="/*"  />
                     </Routes>
                     <Footer />
