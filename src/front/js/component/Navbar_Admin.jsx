@@ -31,8 +31,8 @@ export const Navbar_Admin = () => {
                             </Link>
                         </li>
                         <li className={style.item}>
-                            <Link to="/admin/administration" className={style.link}>
-                                <a className={style.navbar__links}>Administration</a>
+                            <Link to="/admin/finances" className={style.link}>
+                                <a className={style.navbar__links}>Finances</a>
                             </Link>
                         </li>
                         <Link to="/home" className={style.link}>
