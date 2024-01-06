@@ -85,6 +85,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await response.json()
 					const store = getStore()
 					setStore({...store, infoUser: data})
+					console.log("Answer:", data)
 
 				} catch (error) {
 					console.log("Error obtaining information:", error)
