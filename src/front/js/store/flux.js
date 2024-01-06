@@ -4,7 +4,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			userData: null,
 			isLoggedIn: false,
-			newUserRes: ''
+			newUserRes: '',
+			infoUser: []
 		},
 		actions: {
 			logout: () => {
@@ -71,7 +72,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Create user function error==", error)
 				}
 
-			}
+			},
+
+			getUser: async (id) => {
+				try {
+					const url = process.env.BACKEND_URL + `/api/user/${id}`;
+					
+					const response = await fetch(url);
+					if(!response.ok){
+						throw new Error("error:", response.status, response.statusText)
+					}
+					const data = await response.json()
+					const store = getStore()
+					setStore({...store, infoUser: data})
+					console.log("Answer:", data)
+
+				} catch (error) {
+					console.log("Error obtaining information:", error)
+				}
+			},
 
 		}
 	};
