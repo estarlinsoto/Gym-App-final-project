@@ -145,6 +145,7 @@ export const TrainerAssignDiet = () => {
                                     <input type="text" className="form-control" placeholder="Last Name" value={dinner} onChange={(e) => setDinner(e.target.value)} ></input>
                                     <label >Dinner</label>
                                 </div>
+                                
                                 <div className="form-floating mb-3">
                                     <input type="text" className="form-control" placeholder="Last Name" value={supper} onChange={(e) => setSupper(e.target.value)} ></input>
                                     <label >Supper</label>
