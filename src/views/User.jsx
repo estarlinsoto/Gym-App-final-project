@@ -1,16 +1,28 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from "react";
 import style from '../../src/front/styles/User.module.css'
 import { Link } from 'react-router-dom';
 import { Navbar_User } from '../front/js/component/Navbar_User.jsx'
+import { Context } from "../front/js/store/appContext.js";
+import { useNavigate } from 'react-router-dom'
 
 
 const User = () => {
+    const { store, actions } = useContext(Context);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        actions.privateViewRequest()
+        if(store.privateRes === true || sessionStorage.access_token == ""){
+            navigate('/')
+        }
+
+    }, [store.privateRes])
+
     return (
-
-
         <div>
             <Navbar_User />
-            <user className="">
+            
                 <div className={style.main}>
                     <div className={style.main__container}>
 
@@ -32,26 +44,26 @@ const User = () => {
                     <h1>Get Your Best Results Now</h1>
                     <div className={style.services__container}>
                         <div className={style.services__card}>
-                            <Link to="/user/routines">
-                                <h2>Your Routines</h2>
+                            <Link to="/user/routine">
+                                <h2>Your Routine</h2>
                                 <p></p>
                             </Link>
                         </div>
                         <div className={style.services__card}>
-                            <Link to="/user/diets">
+                            <Link to="/user/diet">
                                 <h2>Your Diets</h2>
                                 <p></p>
                             </Link>
                         </div>
                         <div className={style.services__card}>
-                            <Link to="/user/progress">
-                                <h2>Your Progress</h2>
+                            <Link to="/user/calculate">
+                                <h2>Count Calories</h2>
                                 <p></p>
                             </Link>
                         </div>
                     </div>
                 </div>
-            </user >
+            
         </div>
     )
 }
