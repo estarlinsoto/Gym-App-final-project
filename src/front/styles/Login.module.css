@@ -1,5 +1,5 @@
 .container {
-    display: flex;
+    
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -17,7 +17,7 @@
 }
 
 .welcome {
-    font-size: 3rem;
+    font-size: 2rem;
     background-color: #ff8177;
     background-image: linear-gradient(to top, #b721ff 0%, #21d4fe 100%);
     background-size: 100%;
@@ -25,8 +25,10 @@
     -moz-background-clip: text;
     -webkit-text-fill-color: transparent;
     -moz-text-fill-color: transparent;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    
 }
 
 .logo_login {
@@ -45,7 +47,7 @@
 
 
 .form_container {
-    margin-left: 170px;
+    margin: auto;
     background-color: #f9f9f9;
     border-radius: 8px;
     padding: 20px;
@@ -56,6 +58,7 @@
 .form_floating {
     position: relative;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .form_control {
@@ -85,6 +88,7 @@
     margin-top: 30px;
     font-size: 16px;
     cursor: pointer;
+    
 }
 
 .btn:hover {

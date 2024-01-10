@@ -61,6 +61,7 @@ h1 {
     display: block;
     margin-bottom: 5px;
     color: #f7eccd;
+    text-align: center;
 }
 
 .custom_input {
@@ -69,6 +70,7 @@ h1 {
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ced4da;
+    font-weight: 600 ;
 }
 
 .custom_btn {

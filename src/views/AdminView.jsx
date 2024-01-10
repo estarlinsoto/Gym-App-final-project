@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../front/js/store/appContext.js";
 import { Link, Routes, Route, useNavigate } from "react-router-dom"
 import style from '../../src/front/styles/User.module.css'
-
+import { Navbar_Admin } from "../front/js/component/Navbar_Admin.jsx"
 
 export const AdminView = () => {
     const { store, actions } = useContext(Context);
@@ -10,7 +10,7 @@ export const AdminView = () => {
 
     useEffect(() => {
         actions.privateViewRequest()
-        if(store.privateRes === true || sessionStorage.access_token == ""){
+        if (store.privateRes === true || sessionStorage.access_token == "") {
             navigate('/')
         }
 
@@ -19,8 +19,9 @@ export const AdminView = () => {
 
 
     return (
-        
-            <div className={style.services}>
+
+        <div className={`${style.services} container-fluid`}>
+            < Navbar_Admin />
             <h1>Admin</h1>
             <div className={style.services__container}>
                 <div className={style.services__card}>
@@ -43,6 +44,7 @@ export const AdminView = () => {
                 </div>
             </div>
         </div>
-         
+
+
     );
 };
