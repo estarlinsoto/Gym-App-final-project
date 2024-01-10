@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext.js"
 import style from "../../styles/Navbar_Admin.module.css"
 import { useNavigate } from "react-router-dom";
 
 export const Navbar_Admin = () => {
-
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     return (
 
-        <div>
-            <nav className={style.navbar}>
+        <div className="">
+            <nav className={`style.navbar`}>
                 <div className={style.navbar__container}>
-                    <Link to="/user" className={style.link}>
+                    <Link to="/admin" className={style.link}>
                         <a id={style.navbar__logo}><i className="fa-solid fa-dumbbell"></i>_GYMApp</a>
                     </Link>
                     <div className={style.navbar__toggle} id={style.mobile_menu}>
@@ -26,7 +27,7 @@ export const Navbar_Admin = () => {
                             </Link>
                         </li>
                         <li className={style.navbar__item}>
-                            <Link to="/admin/trainers" className={style.link}>
+                            <Link to="/admin/trainer" className={style.link}>
                                 <a className={style.navbar__links}>Trainers</a>
                             </Link>
                         </li>
@@ -37,7 +38,7 @@ export const Navbar_Admin = () => {
                         </li>
                         <Link to="/home" className={style.link}>
                             <li className={style.nabvar__btn}>
-                                <button className={style.button} onClick={() => navigate('/home')} >Logout</button>
+                                <button className={style.button} onClick={() => actions.logout()} >Logout</button>
                             </li>
                         </Link>
                     </ul>

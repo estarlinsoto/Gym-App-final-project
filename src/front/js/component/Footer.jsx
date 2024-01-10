@@ -10,8 +10,8 @@ export const Footer = () => (
                 <div className={style.footer__link__wrapper}>
                     <div className={style.footer__link__items}>
                         <h2>About Us</h2>
-                        <Link to="/careers">
-                        <a>Become a Trainer</a>
+                        <Link to="/login/trainer">
+                        <a>Login For Trainers</a>
                         </Link>
                         <Link to="/policies">
                         <a>Terms and Conditions</a>

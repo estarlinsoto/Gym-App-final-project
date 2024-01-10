@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../front/js/store/appContext.js";
 import { Link, Routes, Route, useNavigate } from "react-router-dom"
 import style from '../../src/front/styles/User.module.css'
+import { Navbar_Admin } from '../front/js/component/Navbar_Admin.jsx'
 
 
 export const AdminTrainer = () => {
@@ -13,7 +14,24 @@ export const AdminTrainer = () => {
         actions.getAllTrainers()
 
         if (store.newTrainerRes == "Email already exists.") {
+            setAlertColor("alert alert-danger")
             setMsg("Email already exists.")
+
+
+            setTimeout(() => {
+                setMsg("")
+                setAlertColor("")
+            }, 5000)
+        }
+        if (store.newTrainerRes == "success") {
+            setAlertColor("alert alert-success")
+            setMsg("trainer added correctly")
+
+
+            setTimeout(() => {
+                setMsg("")
+                setAlertColor("")
+            }, 5000)
         }
 
         if (store.privateRes === true) {
@@ -27,7 +45,7 @@ export const AdminTrainer = () => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [msg, setMsg] = useState("")
-    const [data, setData] = useState('')
+    const [alertColor, setAlertColor] = useState('')
 
     const sendForm = () => {
         let emailInput = email
@@ -35,6 +53,9 @@ export const AdminTrainer = () => {
 
         if (password.length < 6 || !emailInput.includes("@gmail.com") || emailInput.length < 11 || lastName.length < 3 || firstName.length < 3) {
             setMsg("the password or the email not meets the registration requirements.")
+            setAlertColor("alert alert-danger")
+            setTimeout(() => { setMsg("") }, 5000)
+
 
         } else {
 
@@ -64,26 +85,22 @@ export const AdminTrainer = () => {
 
     return (
 
-        <div className="container-fluid d-flex ">
+        <div className="container-fluid bg-black">
 
-            <div>
-                <button type="button" className=" m-5 btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    Add new trainer
-                </button>
-            </div>
+            <Navbar_Admin />
+
             <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel">Add new trainer here!!</h1>
+                        <div className="modal-header ">
+                            <p className="modal-title fs-5 " id="staticBackdropLabel">Add new trainer here!!</p>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             {
                                 <div className="m-5">
 
-                                    {msg.length == 0 ? ""
-                                        : <div className="alert alert-danger" role="alert">{msg}</div>}
+                                    {msg.length == 0 ? "" : <div className={alertColor} role="alert">{msg}</div>}
 
                                     <div className="form-floating mb-3">
                                         <input type="text" className="form-control" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} ></input>
@@ -105,7 +122,7 @@ export const AdminTrainer = () => {
                                         <label for="floatingPassword">Password</label>
                                     </div>
 
-                                    <button type="button" className="btn btn-success w-100 py-2" onClick={() => sendForm()}>Click me for sing up!!</button>
+                                    <button type="button" className="btn btn-success w-100 py-2" onClick={() => sendForm()}>Add new trainer</button>
 
                                     <div className="text-center my-2">
                                         <h5>Requirements for registration:</h5>
@@ -118,37 +135,43 @@ export const AdminTrainer = () => {
                             }
                         </div>
                         <div class="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-danger w-100" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
+            <div className="text-center" >
+                <button type="button" className=" btn btn-warning w-50 p-2 fs-5" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Add new trainer
+                </button>
+            </div>
+            <div className="d-flex p-5 row align-middle ">
+                {store.adminTrainerData.length == 0 ?
+                    <div className="spinner-border text-danger text-center" role="status">
+                    </div> : store.adminTrainerData.msg == "no trainers in db :(" ?
+                        <div class="alert alert-warning" role="alert">
+                            no trainers in db yet
+                        </div> :
+                        store.adminTrainerData.map((ele, index) =>
+                            <div className="  card col-md-6 col-sm-12 col-lg-3" id={index}>
+                                <div className="card-body text-center" >
+                                    <h6 className="card-title"><b>First name</b></h6>
+                                    <h6>{ele.first_name}</h6>
+                                    <h6 className="card-text"><b>Last Name</b> </h6>
+                                    <h6>{ele.last_name}</h6>
+                                    <h6 className="card-text"><b>Email</b> </h6>
+                                    <h6>{ele.email}</h6>
+                                    <h6 className="card-text"><b>Since</b> </h6>
+                                    <h6>{ele.create_at}</h6>
+                                </div>
+                                <div className="card-body text-center">
+                                    <button className="btn btn-danger w-50" onClick={() => actions.deleteTrainer(ele.id)}>Delete</button>
+                                </div>
+                            </div>
 
-
-            {store.adminTrainerData.length == 0 ?
-                <div className="spinner-border text-danger fs-1 text-center" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div> : store.adminTrainerData.map((ele, index) =>
-                    <div className="bg m-3 card" id={index}>
-
-
-                        <div className="card-body " >
-                            <h6 className="card-title"><b>First name</b> {ele.first_name}</h6>
-                            <h6 className="card-text"><b>Last Name</b> {ele.last_name}</h6>
-                            <h6 className="card-text"><b>Email:</b> {ele.email}</h6>
-                            <h6 className="card-text"><b>Since :</b> {ele.create_at}</h6>
-                        </div>
-
-                        <div className="card-body text-center">
-                            <button className="btn btn-danger" onClick={() => actions.deleteTrainer(ele.id)}>Delete</button>
-                        </div>
-                    </div>
-
-                )
-
-            }
-
+                        )
+                }
+            </div>
         </div>
-
     );
 };

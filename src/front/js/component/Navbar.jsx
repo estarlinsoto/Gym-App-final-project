@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext.js"
 import style from "../../styles/Navbar.module.css"
 import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
-
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
     return (
 
@@ -28,7 +29,7 @@ export const Navbar = () => {
                             <a href="/login" className={style.loginBtn}>Login</a>
                         </li>
                         <li className={style.nabvar__btn}>
-                            <button href="/" className={style.button} onClick={()=> navigate('/signup')} >Sign Up</button>
+                            <button href="/" className={style.button} onClick={()=> actions.logout()} >Sign Up</button>
                         </li>
                         
                     </ul>

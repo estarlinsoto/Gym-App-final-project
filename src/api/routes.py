@@ -4,7 +4,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 import resend
 import os
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Trainer, Routines, Diets
+from api.models import db, User, Trainer, Routines, Diets, Admins
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -103,7 +103,7 @@ def get_routine(id_user):
 
     }), 200
 
-@api.route('/all/trainers', methods=['GET'])
+@api.route('/all/trainers')
 @jwt_required()
 def all_trainers():
     query = Trainer.query.all()
@@ -116,8 +116,8 @@ def all_trainers():
         'create_at': trainer.create_at    
 
     } for trainer in query]
+
     if len(all_trainers) == 0:
-        
         return jsonify({'msg': 'no trainers in db :('}), 200
     
     return jsonify(all_trainers), 200
@@ -176,6 +176,7 @@ def get_token():
         email = request.json.get('email')
         password = request.json.get('password')
 
+
         if not email or not password:
             return jsonify({'error': 'Email and password are required.'}), 400
 
@@ -197,7 +198,7 @@ def get_token():
             return {"msg": "Incorrect password"}
 
     except Exception as e:
-        return {"error": f"this email not exist: {str(e)}"}, 500
+        return {"error": f"this email not exist: {str(e)}"}, 400
     
 @api.route('/login/trainer', methods=['POST'])
 def get_token_trainer():
@@ -226,13 +227,32 @@ def get_token_trainer():
             return {"msg": "Incorrect password"}
 
     except Exception as e:
-        return {"error": f"this email not exist: {str(e)}"}, 500
+        return {"error": f"this email not exist: {str(e)}"}, 400
 
 @api.route('/private')
 @jwt_required()
 def private_data():
     user_validation = get_jwt_identity()
     user_from_db = User.query.get(user_validation)
+
+    if user_validation:
+        return jsonify({
+            'msg': 'success',
+            'user_id': user_from_db.id,
+            'create_at': user_from_db.create_at,
+            'first_name': user_from_db.first_name,
+            'last_name': user_from_db.last_name,
+            'email': user_from_db.email
+            }), 200
+
+    else:
+        return jsonify({"msg": 'token no valido o inexistente'}), 401
+    
+@api.route('/private/private')
+@jwt_required()
+def admin_private_data():
+    user_validation = get_jwt_identity()
+    user_from_db = Admins.query.get(user_validation)
 
     if user_validation:
         return jsonify({
@@ -297,7 +317,6 @@ def resetPass():
         return jsonify({"error": str(e)}), 500
     
 @api.route('/user/delete/<int:id>', methods=['DELETE'])
-@jwt_required()
 def delete_user(id):
 
     user_exist_db = User.query.filter_by(id = id).first()
@@ -315,14 +334,13 @@ def delete_user(id):
         }),500
     
 @api.route('/trainer/delete/<int:id>', methods=['DELETE'])
-@jwt_required()
 def delete_trainer(id):
 
     trainer_exist_db = Trainer.query.filter_by(id = id).first()
 
     if trainer_exist_db :
         db.session.delete(trainer_exist_db)
-        #db.session.commit()
+        db.session.commit()
 
         return jsonify({
             'msg': 'success'

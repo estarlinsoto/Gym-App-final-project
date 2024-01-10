@@ -61,23 +61,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 						password: password,
 					}),
 				};
+
 				await fetch(process.env.BACKEND_URL + "/api/login", opts)
-					.then((resp) => {
-						if (resp.status === 200) return resp.json();
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({store: store.loginRes = "this email is not registered"})
+							throw Error(res.statusText)
+						}
 					})
 					.then((data) => {
 						sessionStorage.setItem("access_token", data.access_token);
 
 						setStore({ store: store.loginRes = data.msg })
 						setStore({ store: store.role = data.role })
-						setStore({store: store.privateRes = false})
-						
+						setStore({ store: store.privateRes = false })
 					})
-					.catch((error) => {
-						console.error("There was an error", error);
-
-					});
 			},
+
 			trainerLogIn: async (email, password) => {
 				const store = getStore()
 				const opts = {
@@ -99,8 +101,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 						setStore({ store: store.loginTrainerRes = data.msg })
 						setStore({ store: store.role = data.role })
-						setStore({store: store.privateRes = false})
-						
+						setStore({ store: store.privateRes = false })
+
 					})
 					.catch((error) => {
 						console.error("There was an error", error);
@@ -132,67 +134,66 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			privateViewRequest: async () => {
-				
-					const store = getStore()
-					await fetch(process.env.BACKEND_URL + "/api/private", {
-						headers: {
-							Authorization: `Bearer ${sessionStorage.access_token}`
+
+				const store = getStore()
+				await fetch(process.env.BACKEND_URL + "/api/private", {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
 						}
 					})
-						.then((res) => {
-							if (res.status == 200) {
-								return res.json()
-							} else {
-								setStore({ store: store.privateRes = true })
-								throw Error(res.statusText)
-							}
-						})
-						.then((json) => store.privateData = json)
-						setStore({ store: store.privateData })
+					.then((json) => store.privateData = json)
+				setStore({ store: store.privateData })
 
-				
+
 
 			},
 			getAllUsers: async () => {
-				
-					const store = getStore()
-					await fetch(process.env.BACKEND_URL + "/api/all", {
-						headers: {
-							Authorization: `Bearer ${sessionStorage.access_token}`
+
+				const store = getStore()
+				await fetch(process.env.BACKEND_URL + "/api/all", {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
+
 						}
 					})
-						.then((res) => {
-							if (res.status == 200) { 
-								return res.json()
-							} else {
-								setStore({ store: store.privateRes = true })
-								throw Error(res.statusText)
-								
-							}
-						})
-						.then((json) => setStore({ store: store.adminUserData = json }) )
-				
+					.then((json) => setStore({ store: store.adminUserData = json }))
+
 			},
 			getAllTrainers: async () => {
-					const store = getStore()
-					//setStore({ store: store.adminUserData = "" })
-					await fetch(process.env.BACKEND_URL + "/api/all/trainers", {
-						headers: {
-							Authorization: `Bearer ${sessionStorage.access_token}`
+				const store = getStore()
+				await fetch(process.env.BACKEND_URL + "/api/all/trainers", {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
+
 						}
 					})
-						.then((res) => {
-							if (res.status == 200) { 
-								return res.json()
-							} else {
-								setStore({ store: store.privateRes = true })
-								throw Error(res.statusText)
-								
-							}
-						})
-						.then((json) => setStore({ store: store.adminTrainerData = json }))
+					.then((json) => setStore({ store: store.adminTrainerData = json }))
 
-				
+
 			},
 			deleteUser: async (id) => {
 				try {
@@ -207,7 +208,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						.then((res) => res.json())
 						.then((json) => setStore({ store: store.deleteUserMsg = json.msg }))
 					location.reload(true)
-					
+
 
 
 				} catch (error) {
@@ -225,8 +226,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 						.then((res) => res.json())
 						.then((json) => setStore({ store: store.deleteRoutineMsg = json.msg }))
-					
-					 
+
+
 
 
 				} catch (error) {
@@ -244,7 +245,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 						.then((res) => res.json())
 						.then((json) => setStore({ store: store.deleteDietMsg = json.msg }))
-					
+
 				} catch (error) {
 					console.log("delete diet function error==", error)
 				}
@@ -262,7 +263,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						.then((res) => res.json())
 						.then((json) => setStore({ store: store.deleteUserMsg = json.msg }))
 					location.reload(true)
-					
+
 
 
 				} catch (error) {
@@ -298,12 +299,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				})
 					.then((res) => {
-						if (res.status == 200) { 
+						if (res.status == 200) {
 							return res.json()
 						} else {
 							setStore({ store: store.privateRes = true })
 							throw Error(res.statusText)
-							
+
 						}
 					})
 					.then((json) => setStore({ store: store.routineData = json }))
@@ -319,12 +320,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				})
 					.then((res) => {
-						if (res.status == 200) { 
+						if (res.status == 200) {
 							return res.json()
 						} else {
 							setStore({ store: store.privateRes = true })
 							throw Error(res.statusText)
-							
+
 						}
 					})
 					.then((json) => setStore({ store: store.dietDataUser = json }))
@@ -332,82 +333,82 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 
 			},
-			assignRoutine: async (routine)=> {
+			assignRoutine: async (routine) => {
 				const store = getStore()
 				await fetch(process.env.BACKEND_URL + "/api/assign/routine", {
 					method: "POST",
 					body: JSON.stringify(routine),
-					headers: { 
+					headers: {
 						Authorization: `Bearer ${sessionStorage.access_token}`,
 						"Content-type": "application/json"
 					}
 				})
 					.then((res) => {
-						if (res.status == 200) { 
+						if (res.status == 200) {
 							return res.json()
 						} else {
 							throw Error(res.statusText)
-							
+
 						}
 					})
 					.then((json) => setStore({ store: store.setRoutineRes = json }))
 			},
-			assignDiet: async (diet)=> {
+			assignDiet: async (diet) => {
 				const store = getStore()
 				await fetch(process.env.BACKEND_URL + "/api/assign/diet", {
 					method: "POST",
 					body: JSON.stringify(diet),
-					headers: { 
+					headers: {
 						Authorization: `Bearer ${sessionStorage.access_token}`,
 						"Content-type": "application/json"
 					}
 				})
 					.then((res) => {
-						if (res.status == 200) { 
+						if (res.status == 200) {
 							return res.json()
 						} else {
 							throw Error(res.statusText)
-							
+
 						}
 					})
 					.then((json) => setStore({ store: store.setDietRes = json }))
 			},
 
-			getOneDiet : async (userId) =>{
+			getOneDiet: async (userId) => {
 				const store = getStore()
-				setStore({store : store.dietData = ""})
+				setStore({ store: store.dietData = "" })
 				await fetch(process.env.BACKEND_URL + `/api/get/diet/${userId}`, {
 					headers: {
 						Authorization: `Bearer ${sessionStorage.access_token}`
 					}
 				})
 					.then((res) => {
-						if (res.status == 200) { 
+						if (res.status == 200) {
 							return res.json()
 						} else {
 							setStore({ store: store.privateRes = true })
 							throw Error(res.statusText)
-							
+
 						}
 					})
 					.then((json) => setStore({ store: store.dietData = json }))
 
 			},
-			getOneRoutine : async (userId) =>{
+			getOneRoutine: async (userId) => {
 				const store = getStore()
-				setStore({store : store.routineDataTrainer = ""})
+				setStore({ store: store.routineDataTrainer = "" })
 				await fetch(process.env.BACKEND_URL + `/api/get/routine/${userId}`, {
 					headers: {
 						Authorization: `Bearer ${sessionStorage.access_token}`
 					}
 				})
 					.then((res) => {
-						if (res.status == 200) { 
+						if (res.status == 200) {
 							return res.json()
 						} else {
 							setStore({ store: store.privateRes = true })
 							throw Error(res.statusText)
-							
+
 						}
 					})
 					.then((json) => setStore({ store: store.routineDataTrainer = json }))
