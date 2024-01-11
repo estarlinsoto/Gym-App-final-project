@@ -1,3 +1,5 @@
+
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -21,6 +23,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			dietData: "",
 			routineDataTrainer: "",
 			dietDataUser: "",
+			client: "AU-4GljyB7rnzrM6LrhPjO9jPx039aWPei5veCYq-HAIIB8q0sPYWtVGnd-OccjzW8gjTGjbxd1OSE-W",
+			secret: "EMfE0tuvsMxNqTlL68Na0tlUc4FwDg2k9EJRRXdtVEq__HaQARJAHUQU5xDY0P2zHL9Yc17EAIKi7ul1",
+			product_id: "",
+			redirectToPaypal: ""
+
 		},
 		actions: {
 			logout: () => {
@@ -45,6 +52,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					dietData: "",
 					routineDataTrainer: "",
 					dietDataUser: "",
+					planId: ""
 				});
 
 			},
@@ -67,7 +75,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if (res.status == 200) {
 							return res.json()
 						} else {
-							setStore({store: store.loginRes = "this email is not registered"})
+							setStore({ store: store.loginRes = "this email is not registered" })
 							throw Error(res.statusText)
 						}
 					})
@@ -414,6 +422,145 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then((json) => setStore({ store: store.routineDataTrainer = json }))
 
 			},
+			createProductPaypal: async () => {
+				const store = getStore()
+				const actions = getActions()
+				const auth = { Username: store.client, Password: store.secret }
+
+				const product = {
+					name: 'GYM APP',
+					description: "Subscription of GYMAPP",
+					type: 'SERVICE',
+					category: 'SERVICES',
+					image_url: 'https://st3.depositphotos.com/1030956/15040/v/450/depositphotos_150400242-stock-illustration-sport-club-logotype-template.jpg',
+					return_url: `${process.env.FRONTEND_URL}/home`
+					
+				}
+					
+				await fetch(`${process.env.PAYPAL_URL}/v1/catalogs/products`,{
+					body: JSON.stringify(product),
+					method: 'POST',
+					headers: {
+						Authorization:
+						`Basic ${btoa(store.client + ":" + store.secret)}` ,
+						"Content-type": "application/json"
+						
+					},
+				})
+				.then((res) =>{
+					if(res.status !== 200){
+						return res.json()
+					}else{
+						throw Error(res.statusText)
+					}
+				})
+				.then((json)=>{
+					setStore({store: store.product_id = json.id})
+					actions.createPlan()
+				})
+
+			},
+			createPlan: async ()=> {
+				const store = getStore()
+				const actions = getActions()
+				const plan = {
+					name: 'Gym suscription',
+					product_id: store.product_id,
+					status: "ACTIVE",
+					return_url: "https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/home",
+					billing_cycles: [
+						{
+							frequency: {
+								interval_unit: "MONTH",
+								interval_count: 1
+							},
+							tenure_type: "REGULAR",
+							sequence: 1,
+							total_cycles: 12,
+							pricing_scheme: {
+								fixed_price: {
+									value: "12", 
+									currency_code: "USD"
+								}
+							}
+						}],
+					payment_preferences: {
+						auto_bill_outstanding: true,
+						setup_fee: {
+							value: "12",
+							currency_code: "USD"
+						},
+						setup_fee_failure_action: "CONTINUE",
+						payment_failure_threshold: 3
+					},
+					taxes: {
+						percentage: "10", 
+						inclusive: false
+					}
+				}
+
+
+				await fetch(`${process.env.PAYPAL_URL}/v1/billing/plans`,{
+					body: JSON.stringify(plan),
+					method: 'POST',
+					headers: {
+						Authorization:
+						`Basic ${btoa(store.client + ":" + store.secret)}` ,
+						"Content-type": "application/json"
+					},
+				})
+				.then((res) =>{
+					if(res.status == 201){
+						return res.json()
+					}else{
+						
+						throw Error(res.statusText)
+					}
+				})
+				.then((json)=>{
+					setStore({store: store.planId = json.id})
+					actions.generatesuscription()
+					
+				})
+			},
+			generatesuscription : async ()=> {
+				const store = getStore()
+				const subscription = {
+					plan_id: store.planId, 
+					quantity: 1,
+					subscriber: {
+						name: {
+							given_name: "Leifer",
+							surname: "Mendez"
+						},
+						email_address: "customer@example.com",
+					},
+					return_url: `https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/home`,
+					cancel_url: `https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/home`
+				}
+				await fetch(`${process.env.PAYPAL_URL}/v1/billing/subscriptions`,{
+					body: JSON.stringify(subscription),
+					method: 'POST',
+					headers: {
+						Authorization:
+						`Basic ${btoa(store.client + ":" + store.secret)}` ,
+						"Content-type": "application/json"
+					},
+				})
+				.then((res) =>{
+					if(res.status == 201){
+						return res.json()
+					}else{
+						
+						throw Error(res.statusText)
+					}
+				})
+				.then((json)=>{
+					setStore({store: store.redirectToPaypal = json.links[0].href})
+					console.log(json)
+					
+				})
+			}
 
 
 		}

@@ -29,7 +29,7 @@ export const Navbar = () => {
                             <a href="/login" className={style.loginBtn}>Login</a>
                         </li>
                         <li className={style.nabvar__btn}>
-                            <button href="/" className={style.button} onClick={()=> actions.logout()} >Sign Up</button>
+                            <button href="/" className={style.button} onClick={()=> navigate('/SignUp')} >Sign Up</button>
                         </li>
                         
                     </ul>

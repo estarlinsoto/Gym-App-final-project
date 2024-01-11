@@ -3,6 +3,7 @@ import style from '../../src/front/styles/Home.module.css'
 import { Navbar } from '../front/js/component/Navbar.jsx'
 
 
+
 const Home = () => {
     return (
 
