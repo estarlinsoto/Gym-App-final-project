@@ -26,7 +26,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			client: "AU-4GljyB7rnzrM6LrhPjO9jPx039aWPei5veCYq-HAIIB8q0sPYWtVGnd-OccjzW8gjTGjbxd1OSE-W",
 			secret: "EMfE0tuvsMxNqTlL68Na0tlUc4FwDg2k9EJRRXdtVEq__HaQARJAHUQU5xDY0P2zHL9Yc17EAIKi7ul1",
 			product_id: "",
-			redirectToPaypal: ""
+			redirectToPaypal: "",
+			newUser: "",
+			suscriptioId: ""
 
 		},
 		actions: {
@@ -36,29 +38,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 					message: null,
 					userData: null,
 					isLoggedIn: false,
-					newUserRes: "",
+					newUserRes: '',
 					privateData: "",
 					loginRes: "",
-					role: "",
+					role: '',
 					adminUserData: "",
 					adminTrainerData: "",
 					newTrainerRes: "",
 					loginTrainerRes: "",
 					routineData: "",
-					privateRes: false,
+					privateRes: "",
+					setRoutineRes: "",
 					deleteRoutineMsg: "",
 					setDietRes: "",
 					deleteDietMsg: "",
 					dietData: "",
 					routineDataTrainer: "",
 					dietDataUser: "",
-					planId: ""
+					client: "AU-4GljyB7rnzrM6LrhPjO9jPx039aWPei5veCYq-HAIIB8q0sPYWtVGnd-OccjzW8gjTGjbxd1OSE-W",
+					secret: "EMfE0tuvsMxNqTlL68Na0tlUc4FwDg2k9EJRRXdtVEq__HaQARJAHUQU5xDY0P2zHL9Yc17EAIKi7ul1",
+					product_id: "",
+					redirectToPaypal: "",
+					newUser: "",
+					suscriptioId: ""
 				});
 
 			},
 
 			logIn: async (userEmail, password) => {
 				const store = getStore()
+				const actions = getActions()
+				//setStore ({store : store.})
 				const opts = {
 					method: "POST",
 					headers: {
@@ -74,9 +84,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then((res) => {
 						if (res.status == 200) {
 							return res.json()
-						} else {
+						} else if (res.status == 402) {
+							setStore({ store: store.loginRes = "user not pay, redirecting to paypal" })
+							actions.getUserForPayment(userEmail)
+							//throw Error(res.statusText)
+						} else if (res.status == 401) {
+							setStore({ store: store.loginRes = "Incorrect password" })
+							throw Error(res.statusText)
+						} else if (res.status == 404) {
 							setStore({ store: store.loginRes = "this email is not registered" })
 							throw Error(res.statusText)
+						} else {
+							setStore({ store: store.loginRes = "this email is not registered" })
+							//throw Error(res.statusText)
 						}
 					})
 					.then((data) => {
@@ -86,6 +106,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ store: store.role = data.role })
 						setStore({ store: store.privateRes = false })
 					})
+			},
+			getUserForPayment: async (email) => {
+				const store = getStore()
+				const actions = getActions()
+				await fetch(`${process.env.BACKEND_URL}/api/get`, {
+					body: JSON.stringify({email: email}),
+					method: 'POST',
+					headers: {
+						"Content-type": "application/json",
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
+
+						}
+					})
+					.then((json) => setStore({ store: store.newUser = json }))
+					actions.createProductPaypal()
+
 			},
 
 			trainerLogIn: async (email, password) => {
@@ -122,7 +165,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			createNewUser: async (newUser) => {
 				try {
 					const store = getStore()
+					const actions = getActions()
+					setStore({ store: store.newUser = newUser })
 					setStore({ store: store.newUserRes = "" })
+
 					await fetch(process.env.BACKEND_URL + "/api/signup", {
 						method: "POST",
 						headers: {
@@ -134,6 +180,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 						.then((res) => res.json())
 						.then((json) => setStore({ store: store.newUserRes = json.msg }))
+					actions.createProductPaypal()
 
 				} catch (error) {
 					console.log("Create user function error==", error)
@@ -425,7 +472,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			createProductPaypal: async () => {
 				const store = getStore()
 				const actions = getActions()
-				const auth = { Username: store.client, Password: store.secret }
 
 				const product = {
 					name: 'GYM APP',
@@ -434,33 +480,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 					category: 'SERVICES',
 					image_url: 'https://st3.depositphotos.com/1030956/15040/v/450/depositphotos_150400242-stock-illustration-sport-club-logotype-template.jpg',
 					return_url: `${process.env.FRONTEND_URL}/home`
-					
+
 				}
-					
-				await fetch(`${process.env.PAYPAL_URL}/v1/catalogs/products`,{
+
+				await fetch(`${process.env.PAYPAL_URL}/v1/catalogs/products`, {
 					body: JSON.stringify(product),
 					method: 'POST',
 					headers: {
 						Authorization:
-						`Basic ${btoa(store.client + ":" + store.secret)}` ,
+							`Basic ${btoa(store.client + ":" + store.secret)}`,
 						"Content-type": "application/json"
-						
+
 					},
 				})
-				.then((res) =>{
-					if(res.status !== 200){
-						return res.json()
-					}else{
-						throw Error(res.statusText)
-					}
-				})
-				.then((json)=>{
-					setStore({store: store.product_id = json.id})
-					actions.createPlan()
-				})
+					.then((res) => {
+						if (res.status !== 200) {
+							return res.json()
+						} else {
+							throw Error(res.statusText)
+						}
+					})
+					.then((json) => {
+						setStore({ store: store.product_id = json.id })
+						actions.createPlan()
+					})
 
 			},
-			createPlan: async ()=> {
+			createPlan: async () => {
 				const store = getStore()
 				const actions = getActions()
 				const plan = {
@@ -479,7 +525,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							total_cycles: 12,
 							pricing_scheme: {
 								fixed_price: {
-									value: "12", 
+									value: "12",
 									currency_code: "USD"
 								}
 							}
@@ -494,72 +540,90 @@ const getState = ({ getStore, getActions, setStore }) => {
 						payment_failure_threshold: 3
 					},
 					taxes: {
-						percentage: "10", 
+						percentage: "10",
 						inclusive: false
 					}
 				}
 
 
-				await fetch(`${process.env.PAYPAL_URL}/v1/billing/plans`,{
+				await fetch(`${process.env.PAYPAL_URL}/v1/billing/plans`, {
 					body: JSON.stringify(plan),
 					method: 'POST',
 					headers: {
 						Authorization:
-						`Basic ${btoa(store.client + ":" + store.secret)}` ,
+							`Basic ${btoa(store.client + ":" + store.secret)}`,
 						"Content-type": "application/json"
 					},
 				})
-				.then((res) =>{
-					if(res.status == 201){
-						return res.json()
-					}else{
-						
-						throw Error(res.statusText)
-					}
-				})
-				.then((json)=>{
-					setStore({store: store.planId = json.id})
-					actions.generatesuscription()
-					
-				})
+					.then((res) => {
+						if (res.status == 201) {
+							return res.json()
+						} else {
+
+							throw Error(res.statusText)
+						}
+					})
+					.then((json) => {
+						setStore({ store: store.planId = json.id })
+						actions.generatesuscription()
+
+					})
 			},
-			generatesuscription : async ()=> {
+			generatesuscription: async () => {
 				const store = getStore()
+				const actions = getActions()
 				const subscription = {
-					plan_id: store.planId, 
+					plan_id: store.planId,
 					quantity: 1,
 					subscriber: {
 						name: {
-							given_name: "Leifer",
-							surname: "Mendez"
+							given_name: store.newUser.first_name,
+							surname: store.newUser.last_name
 						},
-						email_address: "customer@example.com",
+						email_address: store.newUser.email,
 					},
-					return_url: `https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/home`,
-					cancel_url: `https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/home`
+					return_url: `${process.env.FRONTEND_URL}/login`,
+					cancel_url: `${process.env.FRONTEND_URL}/home`
 				}
-				await fetch(`${process.env.PAYPAL_URL}/v1/billing/subscriptions`,{
+				await fetch(`${process.env.PAYPAL_URL}/v1/billing/subscriptions`, {
 					body: JSON.stringify(subscription),
 					method: 'POST',
 					headers: {
 						Authorization:
-						`Basic ${btoa(store.client + ":" + store.secret)}` ,
+							`Basic ${btoa(store.client + ":" + store.secret)}`,
 						"Content-type": "application/json"
 					},
 				})
-				.then((res) =>{
-					if(res.status == 201){
-						return res.json()
-					}else{
-						
-						throw Error(res.statusText)
-					}
+					.then((res) => {
+						if (res.status == 201) {
+							return res.json()
+						} else {
+
+							throw Error(res.statusText)
+						}
+					})
+					.then((json) => {
+						setStore({ store: store.redirectToPaypal = json.links[0].href })
+						setStore({ store: store.suscriptioId = json.id })
+						actions.sendEmail()
+						console.log(json)
+					})
+			},
+
+			sendEmail: async () => {
+				const store = getStore()
+				await fetch(`${process.env.BACKEND_URL}/api/payment/update`, {
+					body: JSON.stringify({
+						email: store.newUser.email,
+						id: store.suscriptioId
+					}),
+					method: 'PUT',
+					headers: {
+						"Content-type": "application/json"
+					},
 				})
-				.then((json)=>{
-					setStore({store: store.redirectToPaypal = json.links[0].href})
-					console.log(json)
-					
-				})
+					.then((res) => res.json())
+					.then((json) => console.log(json))
 			}
 
 

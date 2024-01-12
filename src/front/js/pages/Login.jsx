@@ -15,7 +15,7 @@ export const Login = () => {
     const sendLoginForm = () => {
         if (password.length < 6 || !userEmail.includes("@gmail.com") || userEmail.length < 11) {
             setMsg("Please fill both inputs correctly")
-            setTimeout(()=> {setMsg("")}, 5000)
+            setTimeout(()=> {setMsg("")}, 10000)
 
         }
         else {
@@ -33,13 +33,27 @@ export const Login = () => {
 
         }
 
-        if (store.loginRes == "Incorrect password" || store.loginRes == "this email is not registered") {
-            setTimeout(()=> {setMsg("")}, 5000)
-            setMsg("Incorrect password or email")
-           
+        if (store.loginRes == "Incorrect password" ) {
+            setTimeout(()=> {setMsg("")}, 10000)
+            setMsg("Incorrect password or email")  
         }
 
-    }, [store.loginRes])
+        if (store.loginRes == "user not pay, redirecting to paypal") {
+            setTimeout(()=> {setMsg("")}, 10000)
+            setMsg("user not pay, redirecting to paypal")  
+        }
+
+        if (store.loginRes== "this email is not registered"){
+            setTimeout(()=> {setMsg("")}, 10000)
+            setMsg("this email is not registered")  
+        }
+        if(store.redirectToPaypal.length > 0){
+            setTimeout(()=> navigate(window.location.href = store.redirectToPaypal), 5000)  
+             
+            }
+    
+
+    }, [store.loginRes.length, store.redirectToPaypal.length])
 
     return (
         <div className={`${style.container} container-fluid`}>
@@ -69,6 +83,11 @@ export const Login = () => {
                         <Link className={style.text_danger} to="/signup">Not registered?</Link>
                     </div>
                 </div>
+                    
+
+
+
+                
             </div>
         
     )

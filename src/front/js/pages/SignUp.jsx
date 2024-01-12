@@ -9,12 +9,15 @@ export const SignUp = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (store.newUserRes == "success") {
-            navigate('/login')
-        }
         setMsg(store.newUserRes)
 
-    }, [store.newUserRes])
+        if(store.redirectToPaypal.length > 0){
+        setTimeout(()=> navigate(window.location.href = store.redirectToPaypal), 5000)  
+           
+         
+        }
+
+    }, [store.newUserRes, store.redirectToPaypal.length])
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -38,7 +41,7 @@ export const SignUp = () => {
                 last_name: lastName,
                 pathologies: "pathologiesgdfg",
                 date_of_birth: "1151515",
-                role: "admin"
+                role: "user"
 
             }
 

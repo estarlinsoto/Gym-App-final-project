@@ -40,8 +40,7 @@ url_front = "https://potential-journey-wrg5rvjrj543vj7-3000.app.github.dev/"
 
 
 @api.route('/all', methods=['GET'])
-@jwt_required()
-
+#@jwt_required()
 def all():
     query = User.query.all()
     
@@ -84,6 +83,22 @@ def get_diet(id_user):
 
     }), 200
 
+@api.route('/get', methods=['POST'])
+def get_payment_info():
+    email = request.json.get('email')
+
+    query_user = User.query.filter_by(email = email).first()
+    
+    if not query_user:
+        return jsonify({'msg': 'this user not exist'}), 200
+    
+    return jsonify({
+        'first_name': query_user.first_name,
+        'last_name': query_user.last_name,
+        'email': query_user.email,
+
+    }), 200
+
 @api.route('/get/routine/<int:id_user>', methods=['GET'])
 @jwt_required()
 def get_routine(id_user):
@@ -102,6 +117,9 @@ def get_routine(id_user):
         'trainer_last_name': Trainer.query.filter_by(id = query_routine.id_trainer).first().last_name
 
     }), 200
+
+
+
 
 @api.route('/all/trainers')
 @jwt_required()
@@ -172,33 +190,39 @@ def create_one_user():
 
 @api.route('/login', methods=['POST'])
 def get_token():
-    try:
+    
         email = request.json.get('email')
         password = request.json.get('password')
-
 
         if not email or not password:
             return jsonify({'error': 'Email and password are required.'}), 400
 
-        email_from_db = User.query.filter_by(email=email).first()
+        email_from_db = User.query.filter_by(email= email).first()
 
+        if not email_from_db:
+            return jsonify({"msg": "email don't exist"}), 404
+
+       
         password_from_db = email_from_db.password
         true_o_false = bcrypt.check_password_hash(password_from_db, password)
 
-        if true_o_false:
-            access_token = create_access_token(identity= email_from_db.id)
+        if not true_o_false:
+             return jsonify({"msg": "Incorrect password"}), 401
+        
+        if email_from_db.pay != "success":
+            return jsonify({"msg": "user not pay yet"}), 402
+        else: 
 
+            access_token = create_access_token(identity= email_from_db.id)
             return jsonify({
                 'access_token': access_token,
                 'msg': 'success',
-                "role": email_from_db.role
+                "role": email_from_db.role,
+                "payment_state": email_from_db.pay
                 }), 200
-
-        else:
-            return {"msg": "Incorrect password"}
-
-    except Exception as e:
-        return {"error": f"this email not exist: {str(e)}"}, 400
+        
+        
+        
     
 @api.route('/login/trainer', methods=['POST'])
 def get_token_trainer():
@@ -539,3 +563,35 @@ def assign_diet():
     db.session.commit()
 
     return jsonify({'msg': 'success'}), 200
+
+
+@api.route('/paypal/confirmation', methods=['POST'])
+def paypal_confirmation():
+
+    paypal_res = request.json.get('resource')
+    id = paypal_res.get('id')
+
+    user = User.query.filter_by(pay = id).first()
+
+    if user.pay == id:
+        user.pay = "success"
+        db.session.commit()
+        return jsonify({'msg': 'success'}), 200 
+
+    return jsonify({'msg': 'success'}), 200
+
+
+@api.route('/payment/update', methods=['PUT'])
+def update_payment_state():  
+    email = request.json.get('email') 
+    id = request.json.get('id')
+
+    email_from_db = User.query.filter_by(email = email).first()
+
+    if not email_from_db:
+        return jsonify({'msg': 'user not exist'}), 400
+    
+    email_from_db.pay = id
+    db.session.commit()
+
+    return jsonify({"msg": "success"}), 200

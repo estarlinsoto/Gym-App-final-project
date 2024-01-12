@@ -9,7 +9,7 @@ const Home = () => {
 
         <div>
             <Navbar />
-
+        {console.log(localStorage.log)}
             <home className="">
                 <div className={style.main}>
                     <div className={style.main__container}>
