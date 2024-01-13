@@ -13,7 +13,7 @@ const User = () => {
     useEffect(() => {
 
         actions.privateViewRequest()
-        if(store.privateRes === true || sessionStorage.access_token == ""){
+        if (store.privateRes === true || sessionStorage.access_token == "") {
             navigate('/')
         }
 
@@ -21,8 +21,10 @@ const User = () => {
 
     return (
         <div>
-            <Navbar_User />
-            
+            {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> : <div>
+                <div className=""></div>
+                <Navbar_User />
+
                 <div className={style.main}>
                     <div className={style.main__container}>
 
@@ -63,7 +65,7 @@ const User = () => {
                         </div>
                     </div>
                 </div>
-            
+            </div>}
         </div>
     )
 }

@@ -4,14 +4,9 @@ import { Context } from "../store/appContext.js"
 import style from "../../styles/Navbar_Admin.module.css"
 import { useNavigate } from "react-router-dom";
 
-export const Navbar_Admin = () => {
-
+export const Navbar_Trainer = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    const Navbar = () => {
-    const [isActive, setIsActive] = useState(false);
-      
-
     return (
 
         <div className="">
@@ -47,5 +42,5 @@ export const Navbar_Admin = () => {
         </nav>
     </div>
     );
-    }
-}
+};
+

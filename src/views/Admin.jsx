@@ -4,6 +4,8 @@ import {Navbar_Admin} from '../front/js/component/Navbar_Admin.jsx'
 import { Link } from 'react-router-dom'
 
 
+
+
 const Admin = () => {
     return (
         <div>

@@ -9,40 +9,43 @@ export const AdminView = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        actions.privateViewRequest()
+        actions.privateViewRequestAdmin()
         if (store.privateRes === true || sessionStorage.access_token == "") {
             navigate('/')
         }
 
-    }, [store.privateRes])
+    }, [store.privateRes.length])
 
 
 
     return (
 
         <div className={`${style.services} container-fluid`}>
-            < Navbar_Admin />
-            <h1>Admin</h1>
-            <div className={style.services__container}>
-                <div className={style.services__card}>
-                    <Link to="/admin/users">
-                        <h2>Your Clients</h2>
-                        <p>Here you can delete users</p>
-                    </Link>
-                </div>
-                <div className={style.services__card}>
-                    <Link to="/admin/trainer">
-                        <h2>Your Trainers</h2>
-                        <p>Here you can delete users</p>
-                    </Link>
-                </div>
-                <div className={style.services__card}>
-                    <Link to="/user/progress">
-                        <h2>Your Progress</h2>
-                        <p></p>
-                    </Link>
-                </div>
-            </div>
+            {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
+                <div>
+                
+                    <h1>Admin</h1>
+                    <div className={style.services__container}>
+                        <div className={style.services__card}>
+                            <Link to="/admin/users">
+                                <h2>Your Clients</h2>
+                                <p>Here you can delete users</p>
+                            </Link>
+                        </div>
+                        <div className={style.services__card}>
+                            <Link to="/admin/trainer">
+                                <h2>Your Trainers</h2>
+                                <p>Here you can delete users</p>
+                            </Link>
+                        </div>
+                        <div className={style.services__card}>
+                            <Link to="/user/progress">
+                                <h2>Your Progress</h2>
+                                <p></p>
+                            </Link>
+                        </div>
+                    </div>
+                </div>}
         </div>
 
 

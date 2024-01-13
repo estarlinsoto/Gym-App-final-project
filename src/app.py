@@ -72,7 +72,7 @@ def serve_any_other_file(path):
 
 jwt = JWTManager(app)
 app.config["JWT_SECRET_KEY"] = "KCMzbECOh3RdcARVUPPMTeVRd"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=999)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=30)
 # this only runs if `$ python src/main.py` is executed
 
 if __name__ == '__main__':

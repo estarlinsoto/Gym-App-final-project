@@ -10,7 +10,7 @@ export const TrainerHome = () => {
 
     useEffect(() => {
 
-        actions.privateViewRequest()
+        actions.privateViewRequestTrainer()
         if(store.privateRes === true){
             navigate('/')
         }
@@ -21,7 +21,9 @@ export const TrainerHome = () => {
     return (
         
         <div className={style.services}>
-        <h1>Assign Routine</h1>
+             { store.privateRes !== "success" ? <div className="spinner-border" role="status"></div>:<div>
+            <div className="p-5"></div>
+        <h1>Trainer Home</h1>
         <div className={style.services__container}>
             <div className={style.services__card}>
                 <Link to="/trainer/assignroutine">
@@ -37,6 +39,7 @@ export const TrainerHome = () => {
             </div>
            
         </div>
+        </div>}
     </div>
      
 );

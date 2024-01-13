@@ -19,7 +19,7 @@ export const CaloriesCalculator = () => {
 
     useEffect(() => {
         actions.privateViewRequest()
-        if (store.privateRes === true) {
+        if (store.privateRes === true || sessionStorage.access_token == "") {
             navigate('/')
         }
 
@@ -28,7 +28,7 @@ export const CaloriesCalculator = () => {
             setLoseWeightValue(result - 300)
         }
 
-    }, [result, store.privateRes])
+    }, [result, store.privateRes.length])
 
 
 
@@ -56,8 +56,8 @@ export const CaloriesCalculator = () => {
 
 
     return (
-        <div className="text-center mt-5">
-
+        <div className="text-center mt-5 container">
+            { store.privateRes !== "success" ? <div className="spinner-border" role="status"></div>:<div>
             <div className="p-5">
                 <h1><b>calculate your calories!</b></h1>
 
@@ -110,6 +110,7 @@ export const CaloriesCalculator = () => {
 
 
             </div>
+            </div> }
         </div>
     );
 };

@@ -42,7 +42,11 @@ class Admins(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
-    role = role = db.Column(db.String(120), unique=False, nullable=False)
+    role = db.Column(db.String(12), unique=False, nullable=False)
+    client_paypal = db.Column(db.String(120), unique=False, nullable=False)
+    secret_paypal = db.Column(db.String(120), unique=False, nullable=False)
+
+
     
     def __repr__(self):
         return f'<Admins {self.id}>'
@@ -51,6 +55,9 @@ class Admins(db.Model):
         return {
             "id": self.id,
             "email": self.email,
+            "role": self.role,
+            "client_paypal": self.client_paypal,
+            "secret_paypal":self.secret_paypal
             }
 
 

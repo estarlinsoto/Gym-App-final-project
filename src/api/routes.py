@@ -36,7 +36,7 @@ CORS(api)
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 
-url_front = "https://potential-journey-wrg5rvjrj543vj7-3000.app.github.dev/"
+url_front = "https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/login"
 
 
 @api.route('/all', methods=['GET'])
@@ -51,6 +51,7 @@ def all():
         'id': user.id,
         'role': user.role,
         'create_at': user.create_at,
+        'pay': user.pay
         
 
     } for user in query]
@@ -88,6 +89,8 @@ def get_payment_info():
     email = request.json.get('email')
 
     query_user = User.query.filter_by(email = email).first()
+
+    admin_api = Admins.query.filter_by(role = "admin").first()
     
     if not query_user:
         return jsonify({'msg': 'this user not exist'}), 200
@@ -96,6 +99,8 @@ def get_payment_info():
         'first_name': query_user.first_name,
         'last_name': query_user.last_name,
         'email': query_user.email,
+        'client': admin_api.client_paypal,
+        'secret': admin_api.secret_paypal,
 
     }), 200
 
@@ -158,8 +163,11 @@ def all_trainers():
 def create_one_user():    
     email = request.json.get('email')
     existing_user = User.query.filter_by(email=email).first()
+    
+    admin_api = Admins.query.filter_by(role = "admin").first()
+
     if existing_user:
-        return jsonify({'error': 'Email already exists.'}), 409
+        return jsonify({'msg': 'Email already exists.'}), 409
     
     body = request.json
     raw_password = request.json.get('password')
@@ -182,10 +190,40 @@ def create_one_user():
         "date_of_birth" : body["date_of_birth"],
         "email" : body["email"],
         "pathologies" : body["pathologies"],
-        "password" : body["password"]
+        "msg": "success",
+        'client': admin_api.client_paypal,
+        'secret': admin_api.secret_paypal,
         }
 
     return jsonify({"msg": "success", "user_added": ok_to_share }), 200
+
+@api.route('/admin', methods=['POST'])
+def admin():    
+    email = request.json.get('email')
+    existing_admin = Admins.query.filter_by(email=email).first()
+    if existing_admin:
+        return jsonify({'msg': 'Email already exists.'}), 409
+    
+    body = request.json
+    raw_password = request.json.get('password')
+    password_hash = bcrypt.generate_password_hash(raw_password).decode('utf-8')
+    new = Admins(
+       
+        email = body["email"],
+        role = body["role"],
+        password = password_hash,
+        client_paypal= body["client_paypal"],
+        secret_paypal= body['secret_paypal'],
+        )
+    db.session.add(new)
+    db.session.commit()
+
+    ok_to_share = {  
+        "email" : body["email"],
+        "msg": "success"
+        }
+
+    return jsonify({"msg": "success", "added": ok_to_share }), 200
 
 
 @api.route('/login', methods=['POST'])
@@ -193,6 +231,7 @@ def get_token():
     
         email = request.json.get('email')
         password = request.json.get('password')
+
 
         if not email or not password:
             return jsonify({'error': 'Email and password are required.'}), 400
@@ -218,11 +257,39 @@ def get_token():
                 'access_token': access_token,
                 'msg': 'success',
                 "role": email_from_db.role,
-                "payment_state": email_from_db.pay
+                "payment_state": email_from_db.pay,
+                
                 }), 200
         
+@api.route('/log', methods=['POST'])
+def get_token_admin():
+    
+        email = request.json.get('email')
+        password = request.json.get('password')
+
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required.'}), 400
+
+        email_from_db = Admins.query.filter_by(email= email).first()
+
+        if not email_from_db:
+            return jsonify({"msg": "email don't exist"}), 404
+ 
+        password_from_db = email_from_db.password
+        true_o_false = bcrypt.check_password_hash(password_from_db, password)
+
+        if not true_o_false:
+             return jsonify({"msg": "Incorrect password"}), 401
         
-        
+        else: 
+            access_token = create_access_token(identity= email_from_db.id)
+            return jsonify({
+                'access_token': access_token,
+                'msg': 'success',
+                'role': email_from_db.role,
+                'id': email_from_db.id
+                }), 200
+          
     
 @api.route('/login/trainer', methods=['POST'])
 def get_token_trainer():
@@ -272,20 +339,49 @@ def private_data():
     else:
         return jsonify({"msg": 'token no valido o inexistente'}), 401
     
+@api.route('/private/trainer')
+@jwt_required()
+def private_data_trainer():
+    user_validation = get_jwt_identity()
+    trainer_from_db = Trainer.query.get(user_validation)
+
+    if trainer_from_db:
+        return jsonify({
+            'msg': 'success',
+            'create_at': trainer_from_db.create_at,
+            'first_name': trainer_from_db.first_name,
+            'last_name': trainer_from_db.last_name,
+            'email': trainer_from_db.email
+            }), 200
+
+    else:
+        return jsonify({"msg": 'token no valido o inexistente'}), 401
+    
 @api.route('/private/private')
 @jwt_required()
 def admin_private_data():
-    user_validation = get_jwt_identity()
-    user_from_db = Admins.query.get(user_validation)
+    admin_id = get_jwt_identity()
+    admin_query = Admins.query.get(admin_id)
 
-    if user_validation:
+    if admin_query:
+        return jsonify({'msg': 'success'}), 200
+
+    else:
+        return jsonify({"msg": 'token no valido o inexistente'}), 401
+    
+
+@api.route('/get/api/info')
+@jwt_required()
+def admin_api_paypal_info():
+    admin_id = get_jwt_identity()
+    admin_query = Admins.query.get(admin_id)
+
+    if admin_query:
         return jsonify({
             'msg': 'success',
-            'user_id': user_from_db.id,
-            'create_at': user_from_db.create_at,
-            'first_name': user_from_db.first_name,
-            'last_name': user_from_db.last_name,
-            'email': user_from_db.email
+            'email': admin_query.email,
+            'client_paypal': admin_query.client_paypal,
+            'secret_paypal': admin_query.secret_paypal
             }), 200
 
     else:
@@ -310,41 +406,51 @@ def admin_private_data():
 #    return all_users
 
 
-@api.route('/resetpass', methods=['POST'])
-def resetPass():
-    email = request.json.get('email')
+#@api.route('/resetpass', methods=['POST'])
+#def resetPass():
+ #   email = request.json.get('email')
 
-    if not email:
-        return jsonify({'msg': 'email is required'}), 400
+ # #  if not email:
+#     return jsonify({'msg': 'email is required'}), 400
     
+#email_from_db = User.query.filter_by(email= email).first()
 
-    email_from_db = User.query.filter_by(email= email).first()
-
-    if not email_from_db:
+#    if not email_from_db:
     
-        return({'msg': 'this email not exist'}), 404
+#        return({'msg': 'this email not exist'}), 404
     
-    params = {
-        "from": "onboarding@resend.dev",
-        "to": [email],
-        "subject": "Reset your password",
-        "html": f"<strong>{url_front}</strong>",
-    }
+ #   params = {
+ #       "from": "onboarding@resend.dev",
+ #       "to": [email],
+ #       "subject": "Reset your password",
+ #       "html": f"<strong>{url_front}</strong>",
+ #   }
+#
+#    resend.api_key = "re_GeRFSVeg_Jx373tv4jpEfRr2j6gbT3aVw"
+#
+#    try:
+#        r = resend.Emails.send(params)
+#        return jsonify({'msg': 'email was sended'}), 200
 
-    resend.api_key = "re_GeRFSVeg_Jx373tv4jpEfRr2j6gbT3aVw"
-
-    try:
-        r = resend.Emails.send(params)
-        return jsonify({'msg': 'email was sended'}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+#    except Exception as e:
+#        return jsonify({"error": str(e)}), 500
     
 @api.route('/user/delete/<int:id>', methods=['DELETE'])
 def delete_user(id):
 
-    user_exist_db = User.query.filter_by(id = id).first()
+    
+    user_exist_diets = Diets.query.filter_by( id_user= id).first()
 
+    if user_exist_diets :
+        db.session.delete(user_exist_diets)
+        db.session.commit()
+
+    user_exist_routine = Routines.query.filter_by( id_user= id).first()
+    if user_exist_routine:
+        db.session.delete(user_exist_routine)
+        db.session.commit()
+
+    user_exist_db = User.query.filter_by(id = id).first()
     if user_exist_db :
         db.session.delete(user_exist_db)
         db.session.commit()
@@ -576,9 +682,25 @@ def paypal_confirmation():
     if user.pay == id:
         user.pay = "success"
         db.session.commit()
-        return jsonify({'msg': 'success'}), 200 
 
-    return jsonify({'msg': 'success'}), 200
+        params = {
+        "from": "onboarding@resend.dev",
+        "to": [user.email],
+        "subject": "Welcome to GYM APP Sign",
+        
+        "html": f"<h1>Congrats you payment is confirmed sign in now!! {url_front} </h1>",
+        
+    }
+
+    resend.api_key = "re_GeRFSVeg_Jx373tv4jpEfRr2j6gbT3aVw"
+
+    try:
+        r = resend.Emails.send(params)
+        return jsonify({'msg': 'email was sended'}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+  
 
 
 @api.route('/payment/update', methods=['PUT'])
@@ -594,4 +716,5 @@ def update_payment_state():
     email_from_db.pay = id
     db.session.commit()
 
+    
     return jsonify({"msg": "success"}), 200

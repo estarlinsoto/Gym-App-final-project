@@ -15,11 +15,13 @@ import { TrainerAssignDiet }  from "../../views/TrainerAssignDiet.jsx";
 import injectContext from "./store/appContext";
 import { Footer } from "./component/Footer.jsx";
 import { Login } from "./pages/Login.jsx";
+import { AdminLogin } from "./pages/AdminLogin.jsx";
 import { TrainerLogin } from "./pages/TrainerLogin.jsx";
 import { SignUp } from "./pages/SignUp.jsx";
 import { UserRoutines } from "./pages/UserRoutines.jsx";
 import { UserDiet } from "./pages/UserDiet.jsx";
-import { Paypal } from "./component/PayPal.jsx";
+import { AdminSignUp } from "./pages/AdminSignUp.jsx";
+
 
 
 //create your first component
@@ -38,9 +40,11 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Home />} path="/home" />
                         <Route element={<User />} path="/user" />                        
-                        <Route element={<Login />} path="/login" />        
+                        <Route element={<Login />} path="/login" />  
+                        <Route element={<AdminLogin />} path="/login/a" />      
                         <Route element={<TrainerLogin />} path="/login/trainer" />                   
                         <Route element={<SignUp />} path="/signup" />
+                        <Route element={<AdminSignUp />} path="/signup/a" />
                         <Route element={<AdminView />} path="/admin" />
                         <Route element={<AdminUser />} path="/admin/users" />
                         <Route element={<AdminTrainer />} path="/admin/Trainer" />
@@ -49,8 +53,7 @@ const Layout = () => {
                         <Route element={<TrainerHome />} path="/trainer" />   
                         <Route element={<TrainerAssignRoutine />} path="/trainer/assignroutine" />   
                         <Route element={<TrainerAssignDiet />} path="/trainer/assigndiet" />   
-                        <Route element={<CaloriesCalculator />} path="/user/calculate" />     
-                        <Route element={<Paypal />} path="/paypal" /> 
+                        <Route element={<CaloriesCalculator />} path="/user/calculate" />    
                         <Route element={<h1>Not found!</h1>} path="/*"  />
                     </Routes>
                     <Footer />

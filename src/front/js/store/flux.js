@@ -23,8 +23,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			dietData: "",
 			routineDataTrainer: "",
 			dietDataUser: "",
-			client: "AU-4GljyB7rnzrM6LrhPjO9jPx039aWPei5veCYq-HAIIB8q0sPYWtVGnd-OccjzW8gjTGjbxd1OSE-W",
-			secret: "EMfE0tuvsMxNqTlL68Na0tlUc4FwDg2k9EJRRXdtVEq__HaQARJAHUQU5xDY0P2zHL9Yc17EAIKi7ul1",
+			client: "",
+			secret: "",
 			product_id: "",
 			redirectToPaypal: "",
 			newUser: "",
@@ -55,20 +55,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					dietData: "",
 					routineDataTrainer: "",
 					dietDataUser: "",
-					client: "AU-4GljyB7rnzrM6LrhPjO9jPx039aWPei5veCYq-HAIIB8q0sPYWtVGnd-OccjzW8gjTGjbxd1OSE-W",
-					secret: "EMfE0tuvsMxNqTlL68Na0tlUc4FwDg2k9EJRRXdtVEq__HaQARJAHUQU5xDY0P2zHL9Yc17EAIKi7ul1",
+					client: "",
+					secret: "",
 					product_id: "",
 					redirectToPaypal: "",
 					newUser: "",
 					suscriptioId: ""
 				});
+			
 
 			},
 
 			logIn: async (userEmail, password) => {
 				const store = getStore()
 				const actions = getActions()
-				//setStore ({store : store.})
 				const opts = {
 					method: "POST",
 					headers: {
@@ -85,9 +85,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if (res.status == 200) {
 							return res.json()
 						} else if (res.status == 402) {
-							setStore({ store: store.loginRes = "user not pay, redirecting to paypal" })
 							actions.getUserForPayment(userEmail)
-							//throw Error(res.statusText)
+							setStore({ store: store.loginRes = "user not pay, redirecting to paypal" })		
+							throw Error(res.statusText)
 						} else if (res.status == 401) {
 							setStore({ store: store.loginRes = "Incorrect password" })
 							throw Error(res.statusText)
@@ -96,7 +96,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							throw Error(res.statusText)
 						} else {
 							setStore({ store: store.loginRes = "this email is not registered" })
-							//throw Error(res.statusText)
+							throw Error(res.statusText)
 						}
 					})
 					.then((data) => {
@@ -104,7 +104,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 						setStore({ store: store.loginRes = data.msg })
 						setStore({ store: store.role = data.role })
-						setStore({ store: store.privateRes = false })
+						setStore({ store: store.privateRes = "" })
+					})
+			},
+			adminLogIn: async (user) => {
+				const store = getStore()
+				const opts = {
+					method: "POST",
+					headers: {
+						"Content-type": "application/json",
+					},
+					body: JSON.stringify(user),
+				};
+				await fetch(`${process.env.BACKEND_URL}/api/log`, opts)
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else if (res.status == 401) {
+							setStore({ store: store.loginRes = "Incorrect password" })
+							throw Error(res.statusText)
+						} else if (res.status == 404) {
+							setStore({ store: store.loginRes = "this email is not registered" })
+							throw Error(res.statusText)
+						} else {
+							setStore({ store: store.loginRes = "this email is not registered" })
+							throw Error(res.statusText)
+						}
+					})
+					.then((data) => {
+						sessionStorage.setItem("access_token", data.access_token);
+
+						setStore({ store: store.loginRes = data.msg })
+						setStore({ store: store.role = data.role })
+						setStore({ store: store.privateRes = "" })
 					})
 			},
 			getUserForPayment: async (email) => {
@@ -122,12 +154,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return res.json()
 						} else {
 							setStore({ store: store.privateRes = true })
-							throw Error(res.statusText)
-
 						}
 					})
-					.then((json) => setStore({ store: store.newUser = json }))
-					actions.createProductPaypal()
+					.then((json) => {
+						setStore({ store: store.newUser = json })
+						setStore({store: store.client = json.client})
+						setStore({store: store.secret = json.secret})
+						actions.createProductPaypal()
+					})
+					
 
 			},
 
@@ -152,7 +187,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 						setStore({ store: store.loginTrainerRes = data.msg })
 						setStore({ store: store.role = data.role })
-						setStore({ store: store.privateRes = false })
+						setStore({ store: store.privateRes = "" })
 
 					})
 					.catch((error) => {
@@ -160,8 +195,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					});
 			},
-
-
 			createNewUser: async (newUser) => {
 				try {
 					const store = getStore()
@@ -178,8 +211,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 						body: JSON.stringify(newUser)
 					})
-						.then((res) => res.json())
-						.then((json) => setStore({ store: store.newUserRes = json.msg }))
+						.then((res) => {
+							if(res.status == 200){
+								return res.json()
+							}if (res.status == 409){
+								setStore({store: store.newUserRes = "Email already exists."})
+								throw Error(res.statusText)
+							}else{
+								setStore({store: store.newUserRes = res})
+								throw Error(res.statusText)
+							}
+						})
+						.then((json) => {
+						setStore({ store: store.newUserRes = "success" })
+						console.log(json.user_added.client)
+						setStore({store: store.client = json.user_added.client})
+						setStore({store: store.secret = json.user_added.secret})
+
+					})
+
 					actions.createProductPaypal()
 
 				} catch (error) {
@@ -187,7 +237,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 
 			},
+			createNewAdmin: async (admin) => {
+					const store = getStore()
+					setStore({ store: store.newUserRes = "" })
+					await fetch(process.env.BACKEND_URL + "/api/admin", {
+						method: "POST",
+						headers: {
+							"Content-type": "application/json",
+						},
 
+						body: JSON.stringify(admin)
+					})
+						.then((res) => {
+							if(res.status == 200){
+								return res.json()
+							}if (res.status == 409){
+								 setStore({store: store.newUserRes = "Email already exists"})
+								throw Error(res.statusText)
+							}else{
+								 setStore({store: store.newUserRes = "error"})
+								throw Error(res.statusText)
+							}
+						})
+						.then((json) => setStore({ store: store.newUserRes = "success" }))
+
+
+			},
 			privateViewRequest: async () => {
 
 				const store = getStore()
@@ -204,11 +279,50 @@ const getState = ({ getStore, getActions, setStore }) => {
 							throw Error(res.statusText)
 						}
 					})
+					.then((json) => store.privateRes = json.msg)
+				setStore({ store: store.privateRes })
+				console.log(privateRes)
+			},
+			privateViewRequestTrainer: async () => {
+
+				const store = getStore()
+				await fetch(process.env.BACKEND_URL + "/api/private/trainer", {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
+						}
+					})
+					.then((json) => setStore({ store: store.privateRes = json.msg}))
+				
+				
+			},
+
+			privateViewRequestAdmin: async () => {
+
+				const store = getStore()
+				await fetch(`${process.env.BACKEND_URL}/api/private/private` , {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
+						}
+					})
 					.then((json) => store.privateData = json)
+				setStore({store: store.privateRes = "success"})
 				setStore({ store: store.privateData })
-
-
-
 			},
 			getAllUsers: async () => {
 
@@ -344,6 +458,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.log("Create new trainer function error==", error)
 				}
+
+			},
+			getRoutine: async () => {
+				const store = getStore()
+				await fetch(process.env.BACKEND_URL + "/api/get/routine", {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
+
+						}
+					})
+					.then((json) => setStore({ store: store.routineData = json }))
+
+
 
 			},
 			getRoutine: async () => {

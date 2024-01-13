@@ -26,11 +26,11 @@ export const UserDiet = () => {
                     <div className="bg m-3 " >
                         <h1>trainer_first_name: {store.dietDataUser.trainer_first_name}</h1>
                         <h1>trainer_last_name: {store.dietDataUser.trainer_last_name}</h1>
-                        <h1>breakfast: {store.routineData.breakfast}</h1>
-                        <h1>brunch: {store.routineData.brunch}</h1>
-                        <h1>lunch: {store.routineData.lunch}</h1>
-                        <h1>dinner: {store.routineData.dinner}</h1>
-                        <h1>supper: {store.routineData.supper}</h1>
+                        <h1>breakfast: {store.dietDataUser.breakfast}</h1>
+                        <h1>brunch: {store.dietDataUser.brunch}</h1>
+                        <h1>lunch: {store.dietDataUser.lunch}</h1>
+                        <h1>dinner: {store.dietDataUser.dinner}</h1>
+                        <h1>supper: {store.dietDataUser.supper}</h1>
                     </div>           
             }
         </div>

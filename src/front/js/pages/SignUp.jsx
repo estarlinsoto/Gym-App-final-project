@@ -9,12 +9,21 @@ export const SignUp = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setMsg(store.newUserRes)
 
-        if(store.redirectToPaypal.length > 0){
-        setTimeout(()=> navigate(window.location.href = store.redirectToPaypal), 5000)  
-           
-         
+        if (store.newUserRes == "success") {
+            setMsg("redirecting to PAYPAL...")
+        }
+        if (store.newUserRes == "Email already exists.") {
+            setMsg("Email already exists.")
+            setTimeout(()=>{setMsg("")}, 10000)
+        }
+
+
+
+        if (store.redirectToPaypal.length > 0) {
+            setTimeout(() => navigate(window.location.href = store.redirectToPaypal), 5000)
+
+
         }
 
     }, [store.newUserRes, store.redirectToPaypal.length])
@@ -39,8 +48,8 @@ export const SignUp = () => {
                 password: password,
                 first_name: firstName,
                 last_name: lastName,
-                pathologies: "pathologiesgdfg",
-                date_of_birth: "1151515",
+                pathologies: "xxxxxxxx",
+                date_of_birth: "xxxxxxx",
                 role: "user"
 
             }
@@ -65,7 +74,7 @@ export const SignUp = () => {
                 </Link>
                 <h1>Sign Up Now</h1>
 
-                {msg.length === 0 ? "" : <div className="alert alert-danger" role="alert">{msg}</div>}
+                {msg.length === 0 ? "" : <div className="alert alert-danger w-100" role="alert">{msg}</div>}
 
                 <div className={style.custom_form_item}>
                     <label className={style.custom_label} htmlFor="firstName">First Name</label>
