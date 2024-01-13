@@ -28,7 +28,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			product_id: "",
 			redirectToPaypal: "",
 			newUser: "",
-			suscriptioId: ""
+			suscriptioId: "",
+			getUser: ""
 
 		},
 		actions: {
@@ -337,12 +338,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return res.json()
 						} else {
 							setStore({ store: store.privateRes = true })
+							console.log(store.adminUserData)
 							throw Error(res.statusText)
-
 						}
 					})
-					.then((json) => setStore({ store: store.adminUserData = json }))
-
+					.then((json) =>{ 
+						setStore({ store: store.adminUserData = json })
+})
 			},
 			getAllTrainers: async () => {
 				const store = getStore()
@@ -584,6 +586,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then((json) => setStore({ store: store.dietData = json }))
 
 			},
+			getOneUser: async (userId) => {
+				const store = getStore()
+				setStore({ store: store.getUser = "" })
+				await fetch(process.env.BACKEND_URL + `/api/get/user/${userId}`, {
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`
+					}
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							setStore({ store: store.privateRes = true })
+							throw Error(res.statusText)
+
+						}
+					})
+					.then((json) => setStore({ store: store.getUser = json }))
+
+			},
 			getOneRoutine: async (userId) => {
 				const store = getStore()
 				setStore({ store: store.routineDataTrainer = "" })
@@ -759,7 +781,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then((res) => res.json())
 					.then((json) => console.log(json))
-			}
+			},
+			editUser: async (user) => {
+				const store = getStore()
+				await fetch(`${process.env.BACKEND_URL}/api/user/edit`, {
+					body: JSON.stringify(user),
+					method: 'PUT',
+					headers: {
+						Authorization: `Bearer ${sessionStorage.access_token}`,
+						"Content-type": "application/json"
+					},
+				})
+					.then((res) => res.json())
+					.then((json) => console.log(json))
+			},
 
 
 		}

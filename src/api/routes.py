@@ -40,7 +40,7 @@ url_front = "https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/login"
 
 
 @api.route('/all', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def all():
     query = User.query.all()
     
@@ -59,7 +59,7 @@ def all():
 
     if len(all_users) == 0 :
         
-        return jsonify({'msg': 'no user in db :('}), 200
+        return jsonify({'msg': 'no user in db'}), 200
     
     return jsonify(all_users), 200
 
@@ -466,6 +466,19 @@ def delete_user(id):
 @api.route('/trainer/delete/<int:id>', methods=['DELETE'])
 def delete_trainer(id):
 
+    user_exist_diets = Diets.query.filter_by( id_user= id).first()
+
+    if user_exist_diets :
+        db.session.delete(user_exist_diets)
+        db.session.commit()
+
+    user_exist_routine = Routines.query.filter_by( id_user= id).first()
+
+    if user_exist_routine:
+        db.session.delete(user_exist_routine)
+        db.session.commit()
+
+
     trainer_exist_db = Trainer.query.filter_by(id = id).first()
 
     if trainer_exist_db :
@@ -600,6 +613,25 @@ def get_one_diet_user():
                     }), 200
 
 
+@api.route('/get/user/<int:id>', methods=['GET'])
+@jwt_required()
+def get_one_user(id):
+
+    
+    user_from_db = User.query.filter_by(id = id).first()
+
+    if not user_from_db:
+        return ({"msg": "user not exist"}), 404
+
+
+    return jsonify({
+                    'first_name': user_from_db.first_name,
+                    'last_name': user_from_db.last_name,
+                    'email': user_from_db.email,
+                    'id': user_from_db.id        
+                    }), 200
+
+
 @api.route('/routine/delete/<int:id>', methods=['DELETE'])
 def delete_routine(id):
 
@@ -714,6 +746,27 @@ def update_payment_state():
         return jsonify({'msg': 'user not exist'}), 400
     
     email_from_db.pay = id
+    db.session.commit()
+
+    
+    return jsonify({"msg": "success"}), 200
+
+@api.route('/user/edit', methods=['PUT'])
+@jwt_required()
+def edit_user():  
+    email = request.json.get('email') 
+    first_name = request.json.get('first_name')
+    last_name = request.json.get('last_name')
+    id = request.json.get('id')
+
+    user_from_db = User.query.get(id)
+
+    if not user_from_db:
+        return jsonify({'msg': 'user not exist'}), 400
+    
+    user_from_db.email = email
+    user_from_db.first_name = first_name
+    user_from_db.last_name = last_name
     db.session.commit()
 
     

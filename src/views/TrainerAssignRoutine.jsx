@@ -25,7 +25,7 @@ export const TrainerAssignRoutine = () => {
             navigate('/')
         }
 
-    }, [store.privateRes])
+    }, [store.privateRes.length])
 
     const sendRoutine = () => {
         if (chest.length == 0 || arms.length == 0 || legs.length == 0 || shoulders.length == 0) {

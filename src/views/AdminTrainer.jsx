@@ -152,9 +152,7 @@ export const AdminTrainer = () => {
                         {store.adminTrainerData.length == 0 ?
                             <div className="spinner-border text-danger text-center" role="status">
                             </div> : store.adminTrainerData.msg == "no trainers in db :(" ?
-                                <div class="alert alert-warning" role="alert">
-                                    no trainers in db yet
-                                </div> :
+                                <div className="alert alert-warning text-center" role="alert"><h1><b>no trainers in db yet</b></h1></div> :
                                 store.adminTrainerData.map((ele, index) =>
                                     <div className="  card col-md-6 col-sm-12 col-lg-3" id={index}>
                                         <div className="card-body text-center" >
