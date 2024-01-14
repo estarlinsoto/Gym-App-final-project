@@ -13,6 +13,7 @@ export const AdminUser = () => {
     const [email, setEmail] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
+    const [msg, setMsg] = useState("")
 
     useEffect(() => {
 
@@ -21,12 +22,20 @@ export const AdminUser = () => {
         if (store.privateRes === true) {
             navigate('/')
         }
+
+        if (store.editUserRes == 'success') {
+            setMsg('user edited successfully')
+            setTimeout(() => { setMsg('') }, 5000)
+        }
+
         setEmail(store.getUser.email)
         setFirstName(store.getUser.first_name)
         setLastName(store.getUser.last_name)
         setId(store.getUser.id)
 
-    }, [store.privateRes.length, store.getUser.length])
+
+
+    }, [store.privateRes.length, store.getUser.length, store.editUserRes.length])
 
     const sendForm = () => {
         let emailInput = email
@@ -62,6 +71,7 @@ export const AdminUser = () => {
             {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
                 <div>
                     <Navbar_Admin />
+                    {msg.length == 0 ? "" : <div className={`alert alert-success text-center fs-3 mx-5`} role="alert"><b>{msg}</b></div>}
                     <div className="d-flex p-5 row justify-content-center">
                         {store.adminUserData.length == 0 ? <div className="spinner-border text-danger" role="status"></div> :
                             store.adminUserData.msg == "no user in db" ?
@@ -106,7 +116,7 @@ export const AdminUser = () => {
 
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" className="btn btn-danger" onClick={() => actions.deleteUser(id)}>Delete</button>
+                                    <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => actions.deleteUser(id)}>Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -126,11 +136,11 @@ export const AdminUser = () => {
                                     <div className="modal-body">
                                         <div className="form-floating mb-3">
                                             <input type="text" className="form-control" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} ></input>
-                                            <label >First name</label>
+                                            <label >First Name</label>
                                         </div>
                                         <div className="form-floating mb-3">
                                             <input type="text" className="form-control" placeholder="First Name" value={lastName} onChange={(e) => setLastName(e.target.value)} ></input>
-                                            <label >Email</label>
+                                            <label >Last Name</label>
                                         </div>
                                         <div className="form-floating mb-3">
                                             <input type="text" className="form-control" placeholder="First Name" value={email} onChange={(e) => setEmail(e.target.value)} ></input>
@@ -139,7 +149,7 @@ export const AdminUser = () => {
                                     </div>}
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" className="btn btn-primary" onClick={() => sendForm()}>Confirm</button>
+                                    <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => sendForm()}>Confirm</button>
                                 </div>
                             </div>
                         </div>

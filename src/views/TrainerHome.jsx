@@ -24,7 +24,7 @@ export const TrainerHome = () => {
             {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
                 <div>
                     <Navbar_Trainer />
-                    
+
                     <div className={style.services__container__trainer}>
                         <div className={style.services__card}>
                             <Link to="/trainer/assignroutine">

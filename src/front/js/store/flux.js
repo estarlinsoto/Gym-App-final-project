@@ -29,7 +29,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			redirectToPaypal: "",
 			newUser: "",
 			suscriptioId: "",
-			getUser: ""
+			getUser: "",
+			editUserRes: ""
 
 		},
 		actions: {
@@ -61,9 +62,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					product_id: "",
 					redirectToPaypal: "",
 					newUser: "",
-					suscriptioId: ""
+					suscriptioId: "",
+					getUser: "",
+					editUserRes: ""
 				});
-			
+
 
 			},
 
@@ -87,7 +90,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return res.json()
 						} else if (res.status == 402) {
 							actions.getUserForPayment(userEmail)
-							setStore({ store: store.loginRes = "user not pay, redirecting to paypal" })		
+							setStore({ store: store.loginRes = "user not pay, redirecting to paypal" })
 							throw Error(res.statusText)
 						} else if (res.status == 401) {
 							setStore({ store: store.loginRes = "Incorrect password" })
@@ -144,7 +147,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore()
 				const actions = getActions()
 				await fetch(`${process.env.BACKEND_URL}/api/get`, {
-					body: JSON.stringify({email: email}),
+					body: JSON.stringify({ email: email }),
 					method: 'POST',
 					headers: {
 						"Content-type": "application/json",
@@ -159,11 +162,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then((json) => {
 						setStore({ store: store.newUser = json })
-						setStore({store: store.client = json.client})
-						setStore({store: store.secret = json.secret})
+						setStore({ store: store.client = json.client })
+						setStore({ store: store.secret = json.secret })
 						actions.createProductPaypal()
 					})
-					
+
 
 			},
 
@@ -213,23 +216,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify(newUser)
 					})
 						.then((res) => {
-							if(res.status == 200){
+							if (res.status == 200) {
 								return res.json()
-							}if (res.status == 409){
-								setStore({store: store.newUserRes = "Email already exists."})
+							} if (res.status == 409) {
+								setStore({ store: store.newUserRes = "Email already exists." })
 								throw Error(res.statusText)
-							}else{
-								setStore({store: store.newUserRes = res})
+							} else {
+								setStore({ store: store.newUserRes = res })
 								throw Error(res.statusText)
 							}
 						})
 						.then((json) => {
-						setStore({ store: store.newUserRes = "success" })
-						console.log(json.user_added.client)
-						setStore({store: store.client = json.user_added.client})
-						setStore({store: store.secret = json.user_added.secret})
+							setStore({ store: store.newUserRes = "success" })
+							console.log(json.user_added.client)
+							setStore({ store: store.client = json.user_added.client })
+							setStore({ store: store.secret = json.user_added.secret })
 
-					})
+						})
 
 					actions.createProductPaypal()
 
@@ -239,28 +242,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			},
 			createNewAdmin: async (admin) => {
-					const store = getStore()
-					setStore({ store: store.newUserRes = "" })
-					await fetch(process.env.BACKEND_URL + "/api/admin", {
-						method: "POST",
-						headers: {
-							"Content-type": "application/json",
-						},
+				const store = getStore()
+				setStore({ store: store.newUserRes = "" })
+				await fetch(process.env.BACKEND_URL + "/api/admin", {
+					method: "POST",
+					headers: {
+						"Content-type": "application/json",
+					},
 
-						body: JSON.stringify(admin)
+					body: JSON.stringify(admin)
+				})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} if (res.status == 409) {
+							setStore({ store: store.newUserRes = "Email already exists" })
+							throw Error(res.statusText)
+						} else {
+							setStore({ store: store.newUserRes = "error" })
+							throw Error(res.statusText)
+						}
 					})
-						.then((res) => {
-							if(res.status == 200){
-								return res.json()
-							}if (res.status == 409){
-								 setStore({store: store.newUserRes = "Email already exists"})
-								throw Error(res.statusText)
-							}else{
-								 setStore({store: store.newUserRes = "error"})
-								throw Error(res.statusText)
-							}
-						})
-						.then((json) => setStore({ store: store.newUserRes = "success" }))
+					.then((json) => setStore({ store: store.newUserRes = "success" }))
 
 
 			},
@@ -300,15 +303,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 							throw Error(res.statusText)
 						}
 					})
-					.then((json) => setStore({ store: store.privateRes = json.msg}))
-				
-				
+					.then((json) => setStore({ store: store.privateRes = json.msg }))
+
+
 			},
 
 			privateViewRequestAdmin: async () => {
 
 				const store = getStore()
-				await fetch(`${process.env.BACKEND_URL}/api/private/private` , {
+				await fetch(`${process.env.BACKEND_URL}/api/private/private`, {
 					headers: {
 						Authorization: `Bearer ${sessionStorage.access_token}`
 					}
@@ -322,7 +325,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					})
 					.then((json) => store.privateData = json)
-				setStore({store: store.privateRes = "success"})
+				setStore({ store: store.privateRes = "success" })
 				setStore({ store: store.privateData })
 			},
 			getAllUsers: async () => {
@@ -342,9 +345,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							throw Error(res.statusText)
 						}
 					})
-					.then((json) =>{ 
+					.then((json) => {
 						setStore({ store: store.adminUserData = json })
-})
+					})
 			},
 			getAllTrainers: async () => {
 				const store = getStore()
@@ -559,9 +562,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if (res.status == 200) {
 							return res.json()
 						} if (res.status == 400) {
-							setStore({store : store.setDietRes = {'msg' : "user already have diet assigned"}})
+							setStore({ store: store.setDietRes = { 'msg': "user already have diet assigned" } })
 							throw Error(res.statusText)
-						}else {
+						} else {
 							throw Error(res.statusText)
 
 						}
@@ -581,7 +584,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if (res.status == 200) {
 							return res.json()
 						} else {
-							
+
 							throw Error(res.statusText)
 
 						}
@@ -796,7 +799,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 				})
 					.then((res) => res.json())
-					.then((json) => console.log(json))
+					.then((json) => setStore({ store: store.editUserRes = json.msg }))
 			},
 
 

@@ -28,7 +28,7 @@ export const Navbar_Admin = () => {
                     </button>
                     <div className="collapse navbar-collapse text-center" id="navbarNav">
                         <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
+                            <li className="nav-item">
                                 <Link to="/trainer" className="nav-link">
                                     Home
                                 </Link>
@@ -40,14 +40,14 @@ export const Navbar_Admin = () => {
                             </li>
                             <li className="nav-item">
                                 <Link to="/admin/trainer" className="nav-link">
-                                Manage your trainers
+                                    Manage your trainers
                                 </Link>
                             </li>
 
                             <li className="nav-item">
                                 <button
                                     className="btn btn-outline-light"
-                                    onClick={() => {actions.logout(); navigate('/home');}}
+                                    onClick={() => { actions.logout(); navigate('/home'); }}
                                 >
                                     Logout
                                 </button>

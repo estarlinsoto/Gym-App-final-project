@@ -23,7 +23,7 @@ export const AdminView = () => {
         <div className={`${style.services} container-fluid bg-black`}>
             {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
                 <div>
-                <Navbar_Admin />
+                    <Navbar_Admin />
                     <div className={style.services__container}>
                         <div className={style.services__card}>
                             <Link to="/admin/users">

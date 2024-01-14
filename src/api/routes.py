@@ -389,52 +389,6 @@ def admin_api_paypal_info():
         return jsonify({"msg": 'token no valido o inexistente'}), 401
 
 
-#@api.route('/edit', methods=['PUT'])
-#def editUser():
-#   query = User.query.all()
-#    all_users = [{
-#       'first_name': user.first_name,
-#        'last_name': user.last_name,
-#        'email': user.email,
-#        'password': user.password,
-#       'id': user.id
-
-#    } for user in query]
-
-#    if len(all_users) == 0:
-#        return jsonify({'msg': 'no users in db :('})
-
-#    return all_users
-
-
-#@api.route('/resetpass', methods=['POST'])
-#def resetPass():
- #   email = request.json.get('email')
-
- # #  if not email:
-#     return jsonify({'msg': 'email is required'}), 400
-    
-#email_from_db = User.query.filter_by(email= email).first()
-
-#    if not email_from_db:
-    
-#        return({'msg': 'this email not exist'}), 404
-    
- #   params = {
- #       "from": "onboarding@resend.dev",
- #       "to": [email],
- #       "subject": "Reset your password",
- #       "html": f"<strong>{url_front}</strong>",
- #   }
-#
-#    resend.api_key = "re_GeRFSVeg_Jx373tv4jpEfRr2j6gbT3aVw"
-#
-#    try:
-#        r = resend.Emails.send(params)
-#        return jsonify({'msg': 'email was sended'}), 200
-
-#    except Exception as e:
-#        return jsonify({"error": str(e)}), 500
     
 @api.route('/user/delete/<int:id>', methods=['DELETE'])
 def delete_user(id):
@@ -759,6 +713,9 @@ def edit_user():
     first_name = request.json.get('first_name')
     last_name = request.json.get('last_name')
     id = request.json.get('id')
+
+    if not email or not first_name or not last_name or not id:
+        return jsonify({'msg': 'missing properties'}), 400
 
     user_from_db = User.query.get(id)
 

@@ -14,6 +14,7 @@ export const TrainerAssignRoutine = () => {
     const [legs, setLegs] = useState("")
     const [shoulders, setShoulders] = useState("")
     const [userId, setUserId] = useState("")
+    const [id, setId] = useState("")
 
 
     useEffect(() => {
@@ -52,10 +53,10 @@ export const TrainerAssignRoutine = () => {
     return (
 
         <div className="container-fluid bg-black justify-content-center">
-            {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
+            {store.privateRes !== "success" ? <div className="spinner-border " role="status"></div> :
                 <div>
                     <Navbar_Trainer />
-                    {store.deleteRoutineMsg == "success" ? <div className="alert alert-success text-center m-2" role="alert">routine deleted!! </div> :
+                    {store.deleteRoutineMsg == "success" ? <div className="alert alert-success text-center fs-5 m-2" role="alert"><b>routine deleted!!</b></div> :
                         store.deleteRoutineMsg == "this user not have routines" ?
                             <div className="alert alert-danger text-center fs-5 w-100" role="alert">
                                 <b>this user not have routines</b></div> : ""}
@@ -81,7 +82,7 @@ export const TrainerAssignRoutine = () => {
                                             <button onClick={() => setUserId(ele.id)} type="button" className="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
                                                 Assign Routine
                                             </button>
-                                            <button onClick={() => actions.deleteRoutine(ele.id)} type="button" className="btn btn-danger my-2 mx-1" >
+                                            <button type="button" onClick={() => setId(ele.id)} className="btn btn-danger my-2 mx-1" data-bs-toggle="modal" data-bs-target="#Delete" >
                                                 Delete Routine
                                             </button>
                                             <button onClick={() => actions.getOneRoutine(ele.id)} type="button" className="btn btn-primary w-50" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -94,6 +95,23 @@ export const TrainerAssignRoutine = () => {
                             )}
                     </div>
 
+                    <div className="modal fade" id="Delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                                </div>
+                                <h2><b>Are you sure you want to delete this diet?</b></h2>
+
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={() => actions.deleteRoutine(id)}>Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
@@ -104,8 +122,8 @@ export const TrainerAssignRoutine = () => {
                                 </div>
                                 <h2 className=" fs-1 text-center" ><b>Routine</b></h2>
                                 {store.routineDataTrainer.length == 0 ? <div class="d-flex justify-content-center"><div className="spinner-border m-5" role="status"></div> </div> :
-                                    store.routineDataTrainer.msg == "this user not have routine assigned" ? <div className="alert alert-warning m-3" role="alert">
-                                        This user not have routine assigned
+                                    store.routineDataTrainer.msg == "this user not have routine assigned" ? <div className="alert alert-warning m-3 text-center" role="alert">
+                                        <b>This user not have routine assigned</b>
                                     </div>
                                         : <div className="modal-body text-center">
                                             <h1><b>Diet assigned by</b></h1>
@@ -118,7 +136,6 @@ export const TrainerAssignRoutine = () => {
                                             <h2>{store.routineDataTrainer.arms}</h2>
                                             <h2><b>legs</b></h2>
                                             <h2>{store.routineDataTrainer.legs}</h2>
-
                                         </div>
                                 }
                                 <div className="modal-footer">
@@ -134,7 +151,7 @@ export const TrainerAssignRoutine = () => {
                             <div className="modal-dialog">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                       
+
                                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <h2 className="modal-title fs-5 text-center" id="staticBackdropLabel"><b>Assign Routine</b></h2>

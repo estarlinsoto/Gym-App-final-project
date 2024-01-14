@@ -29,10 +29,10 @@ export const UserDiet = () => {
                         <div class="card text-bg-dark p-3">
                             <div class="card-header d-flex">
                                 <h2 className="mx-2"><b>Diet By: </b> </h2>
-                                <h2> {` ${ store.dietDataUser.trainer_first_name} 
+                                <h2> {` ${store.dietDataUser.trainer_first_name} 
                                  ${store.dietDataUser.trainer_last_name}`}
-                                 </h2>
-                                 </div>
+                                </h2>
+                            </div>
                             <div class="card-body text-center" >
                                 <h3 class="card-title ">breakfast</h3>
                                 <p class="card-text"> {store.dietDataUser.breakfast}</p>

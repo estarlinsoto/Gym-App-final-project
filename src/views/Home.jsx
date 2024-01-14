@@ -11,7 +11,7 @@ const Home = () => {
 
         <div className=''>
             <Navbar />
-          
+
 
             <div className={style.main}>
                 <div className={style.main__container}>

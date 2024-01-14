@@ -28,7 +28,7 @@ export const NavBarFunc = () => {
                     </button>
                     <div className="collapse navbar-collapse text-center" id="navbarNav">
                         <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
+                            <li className="nav-item">
                                 <Link to="/user" className="nav-link">
                                     Home
                                 </Link>
@@ -51,7 +51,7 @@ export const NavBarFunc = () => {
                             <li className="nav-item">
                                 <button
                                     className="btn btn-outline-light p-1"
-                                    onClick={() => {actions.logout(); navigate('/home');}}
+                                    onClick={() => { actions.logout(); navigate('/home'); }}
                                 >
                                     Logout
                                 </button>

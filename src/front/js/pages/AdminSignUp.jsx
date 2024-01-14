@@ -11,17 +11,17 @@ export const AdminSignUp = () => {
     useEffect(() => {
         if (store.newUserRes == "success") {
             setMsg("register success!")
-            setTimeout(()=>{setMsg("")}, 10000)
+            setTimeout(() => { setMsg("") }, 10000)
             setColor('alert alert-success')
         }
 
         if (store.newUserRes == "Email already exists") {
             setMsg("Email already exists.")
-            setTimeout(()=>{setMsg("")}, 10000)
+            setTimeout(() => { setMsg("") }, 10000)
             setColor('alert alert-danger')
         }
-        
-        
+
+
     }, [store.newUserRes])
 
     const [email, setEmail] = useState("")
@@ -38,8 +38,8 @@ export const AdminSignUp = () => {
         if (password.length < 6 || !emailInput.includes("@gmail.com") || emailInput.length < 11 || lastName.length < 3 || firstName.length < 3) {
             setColor('alert alert-danger')
             setMsg("The password or email does not meet the registration requirements.")
-            setTimeout(()=>{setMsg("")}, 10000)
-            
+            setTimeout(() => { setMsg("") }, 10000)
+
 
         } else {
 
