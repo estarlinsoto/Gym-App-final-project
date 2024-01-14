@@ -87,11 +87,10 @@ export const AdminTrainer = () => {
 
     return (
 
-        <div className="container-fluid bg-black">
+        <div className="container-fluid bg-black justify-content-center">
             {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
                 <div>
-                    
-
+                    <Navbar_Admin />
                     <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div className="modal-dialog">
                             <div className="modal-content">
@@ -130,7 +129,7 @@ export const AdminTrainer = () => {
                                             <div className="text-center my-2">
                                                 <h5>Requirements for registration:</h5>
                                                 <h6>Password must be minimum length of 6</h6>
-                                                <h6>We only accept Gmail</h6>
+                                                <h6>Only accept Gmail</h6>
                                             </div>
                                         </div>
 
@@ -148,13 +147,14 @@ export const AdminTrainer = () => {
                             Add new trainer
                         </button>
                     </div>
-                    <div className="d-flex p-5 row align-middle ">
+
+                    <div className="d-flex row p-5 justify-content-center ">
                         {store.adminTrainerData.length == 0 ?
                             <div className="spinner-border text-danger text-center" role="status">
                             </div> : store.adminTrainerData.msg == "no trainers in db :(" ?
                                 <div className="alert alert-warning text-center" role="alert"><h1><b>no trainers in db yet</b></h1></div> :
                                 store.adminTrainerData.map((ele, index) =>
-                                    <div className="  card col-md-6 col-sm-12 col-lg-3" id={index}>
+                                    <div className="  m-2 card col-md-6 col-sm-12 col-lg-3" id={index}>
                                         <div className="card-body text-center" >
                                             <h6 className="card-title"><b>First name</b></h6>
                                             <h6>{ele.first_name}</h6>

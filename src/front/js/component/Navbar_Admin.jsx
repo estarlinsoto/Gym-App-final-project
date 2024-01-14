@@ -1,51 +1,61 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Context } from "../store/appContext.js"
-import style from "../../styles/Navbar_Admin.module.css"
 import { useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext.js";
+import style from "../../styles/Navbar_Admin.module.css"
 
 export const Navbar_Admin = () => {
-
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    const Navbar = () => {
-    const [isActive, setIsActive] = useState(false);
-      
 
     return (
-
-        <div className="">
-        <nav className={`style.navbar navbar navbar-expand-lg bg-body-black` }>
-            <div className={style.navbar__container}>
-                <Link to="/trainer" className={style.link}>
-                    <a id={style.navbar__logo }><i className="fa-solid fa-dumbbell"></i>_GYMApp</a>
-                </Link>
-                
-                <ul className={style.navbar__menu}>
-                    <li className={style.nabvar__item}>
-                        <Link to="/admin/users" className={style.link}>
-                            <a className={style.navbar__links}>Users</a>
-                        </Link>
-                    </li>
-                    <li className={style.navbar__item}>
-                        <Link to="/admin/trainer" className={style.link}>
-                            <a className={style.navbar__links}>Trainers</a>
-                        </Link>
-                    </li>
-                    <li className={style.item}>
-                        <Link to="/admin/finances" className={style.link}>
-                            <a className={style.navbar__links}>Finances</a>
-                        </Link>
-                    </li>
-                    <Link to="/home" className={style.link}>
-                        <li className={style.nabvar__btn}>
-                            <button className={style.button} onClick={() => actions.logout()} >Logout</button>
-                        </li>
+        <div>
+            <nav className="navbar navbar-expand-lg navbar-dark bg-black">
+                <div className={` container-fluid`}>
+                    <Link to="/trainer" className="navbar-brand">
+                        <a id={style.navbar__logo}><i id={style.navbar__logo} className="fa-solid fa-dumbbell"></i>_GYMApp</a>
                     </Link>
-                </ul>
-            </div>
-        </nav>
-    </div>
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse text-center" id="navbarNav">
+                        <ul className="navbar-nav ms-auto">
+                        <li className="nav-item">
+                                <Link to="/trainer" className="nav-link">
+                                    Home
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to="/admin/users" className="nav-link">
+                                    Manage your Clients
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to="/admin/trainer" className="nav-link">
+                                Manage your trainers
+                                </Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <button
+                                    className="btn btn-outline-light"
+                                    onClick={() => {actions.logout(); navigate('/home');}}
+                                >
+                                    Logout
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
     );
-    }
-}
+};

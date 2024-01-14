@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../front/js/store/appContext.js";
 import { Link, Routes, Route, useNavigate } from "react-router-dom"
-
+import { Navbar_User } from '../front/js/component/Navbar_User.jsx'
 
 export const CaloriesCalculator = () => {
     const { store, actions } = useContext(Context);
@@ -56,9 +56,11 @@ export const CaloriesCalculator = () => {
 
 
     return (
-        <div className="text-center mt-5 container">
+        <div className="text-center">
             { store.privateRes !== "success" ? <div className="spinner-border" role="status"></div>:<div>
-            <div className="p-5">
+            <Navbar_User />
+            <div className="m-5 px-5 ">
+           
                 <h1><b>calculate your calories!</b></h1>
 
                 { message.length == 0 ? "" : <div class="alert alert-danger" role="alert">{message}</div> }

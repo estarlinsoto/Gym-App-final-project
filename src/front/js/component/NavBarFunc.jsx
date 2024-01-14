@@ -1,36 +1,60 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import style from "../../styles/Navbar_User.module.css"
 import { useNavigate } from "react-router-dom";
-import { Context } from "../store/appContext.js"
+import { Context } from "../store/appContext.js";
+import style from "../../styles/Navbar_Admin.module.css"
 
 export const NavBarFunc = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    return (
 
+    return (
         <div>
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div className="container-fluid">
+            <nav className="navbar navbar-expand-lg navbar-dark bg-black">
+                <div className={` container-fluid`}>
                     <Link to="/trainer" className="navbar-brand">
-                        <i className="fas fa-dumbbell"></i> _GYMApp
+                        <a id={style.navbar__logo}><i id={style.navbar__logo} className="fa-solid fa-dumbbell"></i>_GYMApp</a>
                     </Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <Link to="/user/routines" className="nav-link">Routines</Link>
+                    <div className="collapse navbar-collapse text-center" id="navbarNav">
+                        <ul className="navbar-nav ms-auto">
+                        <li className="nav-item">
+                                <Link to="/user" className="nav-link">
+                                    Home
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/user/diets" className="nav-link">Diets</Link>
+                                <Link to="/user/routine" className="nav-link">
+                                    Your Routine
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/user/progress" className="nav-link">Progress</Link>
+                                <Link to="/user/diet" className="nav-link">
+                                    Your Diet
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <button className="btn btn-outline-light" onClick={() => { actions.logout(); navigate('/home'); }}>Logout</button>
+                                <Link to="/user/calculate" className="nav-link">
+                                    Calculies calculator
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <button
+                                    className="btn btn-outline-light p-1"
+                                    onClick={() => {actions.logout(); navigate('/home');}}
+                                >
+                                    Logout
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -39,4 +63,3 @@ export const NavBarFunc = () => {
         </div>
     );
 };
-

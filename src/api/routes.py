@@ -80,7 +80,8 @@ def get_diet(id_user):
         'dinner': query_diet.dinner,
         'supper': query_diet.supper,
         'trainer_first_name': Trainer.query.filter_by(id = query_diet.id_trainer).first().first_name,
-        'trainer_last_name': Trainer.query.filter_by(id = query_diet.id_trainer).first().last_name
+        'trainer_last_name': Trainer.query.filter_by(id = query_diet.id_trainer).first().last_name,
+        'msg': 'success'
 
     }), 200
 

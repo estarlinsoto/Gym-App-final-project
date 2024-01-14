@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../front/js/store/appContext.js";
 import { Link, Routes, Route, useNavigate } from "react-router-dom"
 import style from '../../src/front/styles/User.module.css'
-import { NavBarFunc } from "../front/js/component/NavBarFunc.jsx";
+import { Navbar_Trainer } from "../front/js/component/Navbar_Trainer.jsx";
 
 export const TrainerAssignRoutine = () => {
     const { store, actions } = useContext(Context);
@@ -20,7 +20,7 @@ export const TrainerAssignRoutine = () => {
 
         actions.getAllUsers()
         actions.privateViewRequestTrainer()
-        
+
         if (store.privateRes === true) {
             navigate('/')
         }
@@ -54,17 +54,20 @@ export const TrainerAssignRoutine = () => {
         <div className="container-fluid bg-black justify-content-center">
             {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
                 <div>
+                    <Navbar_Trainer />
                     {store.deleteRoutineMsg == "success" ? <div className="alert alert-success text-center m-2" role="alert">routine deleted!! </div> :
-                        store.deleteRoutineMsg == "this user not have routines" ? <div className="alert alert-danger " role="alert">this user not have routines </div> : ""}
-                    <NavBarFunc/>
-                    <div className="d-flex p-5 row align-middle">
+                        store.deleteRoutineMsg == "this user not have routines" ?
+                            <div className="alert alert-danger text-center fs-5 w-100" role="alert">
+                                <b>this user not have routines</b></div> : ""}
+
+                    <div className="d-flex p-5 row justify-content-center">
 
                         {store.adminUserData.length == 0 ?
                             <div className="spinner-border text-danger" role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </div> : store.adminUserData.map((ele, index) =>
-                                <div className="my-1 card col-md-6 col-sm-12 col-lg-3">
-                                    <div className="bg m-3 card text-center" id={ele.id}>
+                                <div className="m-2 col-md-6 col-sm-12 col-lg-3">
+                                    <div className=" card text-center" id={ele.id}>
                                         <div className="card-body " >
                                             <h6 className="card-title"><b>First name</b></h6>
                                             <h6> {ele.first_name}</h6>
@@ -78,7 +81,7 @@ export const TrainerAssignRoutine = () => {
                                             <button onClick={() => setUserId(ele.id)} type="button" className="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
                                                 Assign Routine
                                             </button>
-                                            <button onClick={() => actions.deleteRoutine(ele.id)} type="button" className="btn btn-danger my-2" >
+                                            <button onClick={() => actions.deleteRoutine(ele.id)} type="button" className="btn btn-danger my-2 mx-1" >
                                                 Delete Routine
                                             </button>
                                             <button onClick={() => actions.getOneRoutine(ele.id)} type="button" className="btn btn-primary w-50" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -96,25 +99,30 @@ export const TrainerAssignRoutine = () => {
                             <div className="modal-content">
 
                                 <div className="modal-header text-center">
-                                    <h1 className=" fs-5 text-center" id="exampleModalLabel">Routine</h1>
+
                                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-
+                                <h2 className=" fs-1 text-center" ><b>Routine</b></h2>
                                 {store.routineDataTrainer.length == 0 ? <div class="d-flex justify-content-center"><div className="spinner-border m-5" role="status"></div> </div> :
                                     store.routineDataTrainer.msg == "this user not have routine assigned" ? <div className="alert alert-warning m-3" role="alert">
                                         This user not have routine assigned
                                     </div>
-                                        : <div className="modal-body ">
-                                            <h1>Routine assigned by: {`${store.routineDataTrainer.trainer_first_name} ${store.routineDataTrainer.trainer_last_name}`}</h1>
-                                            <h2>Chest: {store.routineDataTrainer.Chest}</h2>
-                                            <h2>shoulders: {store.routineDataTrainer.shoulders}</h2>
-                                            <h2>arms: {store.routineDataTrainer.arms}</h2>
-                                            <h2>legs: {store.routineDataTrainer.legs}</h2>
+                                        : <div className="modal-body text-center">
+                                            <h1><b>Diet assigned by</b></h1>
+                                            <h1>{`${store.routineDataTrainer.trainer_first_name} ${store.routineDataTrainer.trainer_last_name}`}</h1>
+                                            <h2><b>Chest</b></h2>
+                                            <h2>{store.routineDataTrainer.Chest}</h2>
+                                            <h2><b>Shoulders</b></h2>
+                                            <h2>{store.routineDataTrainer.shoulders}</h2>
+                                            <h2><b>Arms</b></h2>
+                                            <h2>{store.routineDataTrainer.arms}</h2>
+                                            <h2><b>legs</b></h2>
+                                            <h2>{store.routineDataTrainer.legs}</h2>
 
                                         </div>
                                 }
                                 <div className="modal-footer">
-                                    <button type="button" className=" w-100 btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" className=" w-100 btn btn-danger" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -126,10 +134,10 @@ export const TrainerAssignRoutine = () => {
                             <div className="modal-dialog">
                                 <div className="modal-content">
                                     <div className="modal-header">
-                                        <h1 className="modal-title fs-5" id="staticBackdropLabel">Assign Routine</h1>
+                                       
                                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-
+                                    <h2 className="modal-title fs-5 text-center" id="staticBackdropLabel"><b>Assign Routine</b></h2>
                                     <div className="modal-body">
                                         {store.setRoutineRes.length == 0 ? "" : <div className="alert alert-success col-12 " role="alert">routine added successfully!!</div>}
                                         {msg.length == 0 ? "" : <div class="alert alert-danger" role="alert">{msg}</div>}

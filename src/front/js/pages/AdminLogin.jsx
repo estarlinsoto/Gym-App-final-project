@@ -55,9 +55,9 @@ export const AdminLogin = () => {
                 <Link to='/' className={style.logo_login}><i class="fa-solid fa-dumbbell">_GYMApp</i></Link>
             </div>
             <div className={`${style.welcome} text-center`}>
-                <p>Admin</p>
+                <p><b>Admin</b></p>
             </div>
-            <div className={style.form_container}>
+            <div className={`${style.form_container}`}>
                 {msg.length == 0 ? "" : <div class="alert alert-danger" role="alert">{msg}</div>}
                 <div className={style.form_floating}>
                     <label>Email address</label>

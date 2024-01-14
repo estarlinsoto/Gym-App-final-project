@@ -33,9 +33,7 @@ export const AdminUser = () => {
         emailInput = emailInput.toLocaleLowerCase()
 
         if (!emailInput.includes("@gmail.com") || emailInput.length < 11 || lastName.length < 3 || firstName.length < 3) {
-            //setMsg("Please fill all inputs correctly")
-            //setAlertColor("alert alert-danger")
-            //setTimeout(() => { setMsg("") }, 10000)
+
 
 
         } else {
@@ -54,21 +52,22 @@ export const AdminUser = () => {
             setFirstName('')
             setLastName('')
 
-        } //store.AdminUserData.msg== "no user in db :("
+        }
     }
 
 
     return (
 
-        <div className="container-fluid bg-black ">
+        <div className="container-fluid bg-black justify-content-center">
             {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
                 <div>
-                    <div className="d-flex p-5 row align-middle">
+                    <Navbar_Admin />
+                    <div className="d-flex p-5 row justify-content-center">
                         {store.adminUserData.length == 0 ? <div className="spinner-border text-danger" role="status"></div> :
                             store.adminUserData.msg == "no user in db" ?
                                 <div className="alert alert-warning text-center" role="alert"><h1><b>no user in db yet</b></h1></div> :
                                 store.adminUserData.map((ele, index) =>
-                                    <div className="my-1 card col-md-6 col-sm-12 col-lg-4" id={index}>
+                                    <div className="m-2 card col-md-6 col-sm-12 col-lg-3" id={index}>
 
                                         <div className="card-body text-center" >
                                             <h6 className="card-title"><b>First name</b> </h6>

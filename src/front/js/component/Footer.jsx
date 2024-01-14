@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const Footer = () => (
 
-    <footer className="">
+
         <div className={style.footer__container}>
             <div className={style.footer__links}>
                 <div className={style.footer__link__wrapper}>
@@ -88,27 +88,27 @@ export const Footer = () => (
                     <div className={style.social__icons}>
                      <Link to= "facebook">
                         <a className={style.social__icon__link} target="_blank">
-                            <i className="fa-brands fa-facebook"></i>
+                            <i className="fa-brands fa-facebook fs-1"></i>
                         </a>
                         </Link>
                         <Link to= "instagram">
                         <a className={style.social__icon__link} target="_blank">
-                            <i className="fa-brands fa-instagram"></i>
+                            <i className="fa-brands fa-instagram fs-1"></i>
                         </a>
                         </Link>
                         <Link to= "youtube">
                         <a className={style.social__icon__link} target="_blank">
-                            <i className="fa-brands fa-youtube"></i>
+                            <i className="fa-brands fa-youtube fs-1"></i>
                         </a>
                         </Link>
                         <Link to= "linkedin">
-                        <a className={style.social__icon__link} target="_blank">
-                            <i class="fa-brands fa-linkedin"></i>
+                        <a className={style.s } target="_blank">
+                            <i class="fa-brands fa-linkedin fs-1"></i>
                         </a>
                         </Link>
                     </div>
                 </div>
             </div>
         </div>
-    </footer>
+    
 );

@@ -11,15 +11,13 @@ export const SignUp = () => {
     useEffect(() => {
 
         if (store.newUserRes == "success") {
-            setMsg("redirecting to PAYPAL...")
+            setMsg('')
+            setPaypalMsg('success')
         }
         if (store.newUserRes == "Email already exists.") {
             setMsg("Email already exists.")
-            setTimeout(()=>{setMsg("")}, 10000)
+            setTimeout(() => { setMsg("") }, 10000)
         }
-
-
-
         if (store.redirectToPaypal.length > 0) {
             setTimeout(() => navigate(window.location.href = store.redirectToPaypal), 5000)
 
@@ -33,6 +31,7 @@ export const SignUp = () => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [msg, setMsg] = useState("")
+    const [paypalMsg, setPaypalMsg] = useState("")
 
     const sendForm = () => {
         let emailInput = email
@@ -75,6 +74,16 @@ export const SignUp = () => {
                 <h1>Sign Up Now</h1>
 
                 {msg.length === 0 ? "" : <div className="alert alert-danger w-100" role="alert">{msg}</div>}
+
+                {paypalMsg.length === 0 ? "" :
+                    <div >
+                        <div className="alert alert-success w-100 d-flex" role="alert"><h2>Redirecting to paypal, wait a minute...</h2>
+                            <div className="spinner-border text-light" role="status">
+                            </div>
+                        </div>
+                    </div>
+                }
+
 
                 <div className={style.custom_form_item}>
                     <label className={style.custom_label} htmlFor="firstName">First Name</label>

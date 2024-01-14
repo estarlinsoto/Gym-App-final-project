@@ -20,11 +20,10 @@ export const AdminView = () => {
 
     return (
 
-        <div className={`${style.services} container-fluid`}>
+        <div className={`${style.services} container-fluid bg-black`}>
             {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> :
                 <div>
-                
-                    <h1>Admin</h1>
+                <Navbar_Admin />
                     <div className={style.services__container}>
                         <div className={style.services__card}>
                             <Link to="/admin/users">
@@ -36,12 +35,6 @@ export const AdminView = () => {
                             <Link to="/admin/trainer">
                                 <h2>Your Trainers</h2>
                                 <p>Here you can delete users</p>
-                            </Link>
-                        </div>
-                        <div className={style.services__card}>
-                            <Link to="/user/progress">
-                                <h2>Your Progress</h2>
-                                <p></p>
                             </Link>
                         </div>
                     </div>

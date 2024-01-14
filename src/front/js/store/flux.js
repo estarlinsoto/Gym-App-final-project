@@ -558,7 +558,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then((res) => {
 						if (res.status == 200) {
 							return res.json()
-						} else {
+						} if (res.status == 400) {
+							setStore({store : store.setDietRes = {'msg' : "user already have diet assigned"}})
+							throw Error(res.statusText)
+						}else {
 							throw Error(res.statusText)
 
 						}
@@ -578,7 +581,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if (res.status == 200) {
 							return res.json()
 						} else {
-							setStore({ store: store.privateRes = true })
+							
 							throw Error(res.statusText)
 
 						}
