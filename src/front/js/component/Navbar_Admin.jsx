@@ -29,7 +29,7 @@ export const Navbar_Admin = () => {
                     <div className="collapse navbar-collapse text-center" id="navbarNav">
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <Link to="/trainer" className="nav-link">
+                                <Link to="/admin" className="nav-link">
                                     Home
                                 </Link>
                             </li>

@@ -38,12 +38,12 @@ bcrypt = Bcrypt(app)
 
 url_front = "https://cuddly-train-69g46jgrrpqq3r9pg-3000.app.github.dev/login"
 
-
+#hacemos un llamado que lista todos los usuarios 
 @api.route('/all', methods=['GET'])
 @jwt_required()
 def all():
     query = User.query.all()
-    
+    # con este bucle for devolcemos un array de objetos con los usuarios
     all_users = [{
         'first_name': user.first_name,
         'last_name': user.last_name,
@@ -63,7 +63,7 @@ def all():
     
     return jsonify(all_users), 200
 
-
+# hacemos un llamado a la table diets para traer una dieta por el id
 @api.route('/get/diet/<int:id_user>', methods=['GET'])
 @jwt_required()
 def get_diet(id_user):
@@ -85,6 +85,7 @@ def get_diet(id_user):
 
     }), 200
 
+#hacemos un llamado a la tabla user para verificar que los datos del request body sean los correctos
 @api.route('/get', methods=['POST'])
 def get_payment_info():
     email = request.json.get('email')
@@ -92,7 +93,7 @@ def get_payment_info():
     query_user = User.query.filter_by(email = email).first()
 
     admin_api = Admins.query.filter_by(role = "admin").first()
-    
+
     if not query_user:
         return jsonify({'msg': 'this user not exist'}), 200
     
@@ -103,8 +104,9 @@ def get_payment_info():
         'client': admin_api.client_paypal,
         'secret': admin_api.secret_paypal,
 
-    }), 200
+    }), 200 #si todo esta correcto devolvemos  un objeto con las credenciales necesarias para hacer las transacciones de paypal
 
+#hacemos un llamado a la table diets para traer una routine por el id
 @api.route('/get/routine/<int:id_user>', methods=['GET'])
 @jwt_required()
 def get_routine(id_user):
@@ -124,6 +126,7 @@ def get_routine(id_user):
 
     }), 200
 
+# hacemos un llamado a la tabla user
 @api.route('/get/pay/<string:email>', methods=['GET'])
 def get_payment_id(email):
     
@@ -133,10 +136,11 @@ def get_payment_id(email):
         return jsonify({'msg': ' id payment not exist'}), 200
     
     if query_payment.pay == 'success':
-        return jsonify({ 'msg': 'success' }), 200
+        return jsonify({ 'msg': 'success' }), 200 # devolvemos success si el pago del usuario fue comprobado por paypal
   
     return jsonify({'msg': 'payment not success yet'}), 200
 
+#hacemos un llamado a la tabla trainer para listarlos
 @api.route('/all/trainers')
 @jwt_required()
 def all_trainers():
@@ -156,26 +160,13 @@ def all_trainers():
     
     return jsonify(all_trainers), 200
 
-
-
-    # params = {
-    #     "from": "Acme <onboarding@resend.dev>",
-    #     "to": ["delivered@resend.dev"],
-    #     "subject": "hello world",
-    #     "html": "<strong>it works!</strong>",
-    # }
-
-
-
-    # return jsonify(params)
-
-
+# hacemos llamado a la tabla user para registrar un usuario nuevo
 @api.route('/signup', methods=['POST'])
 def create_one_user():    
     email = request.json.get('email')
     existing_user = User.query.filter_by(email=email).first()
     
-    admin_api = Admins.query.filter_by(role = "admin").first()
+    admin_api = Admins.query.filter_by(role = "admin").first() # se hace un llamado a la tabla admin para traer credenciales necesarias para que el usurio pueda hacer el pago correctamente
 
     if existing_user:
         return jsonify({'msg': 'Email already exists.'}), 409
@@ -208,6 +199,7 @@ def create_one_user():
 
     return jsonify({"msg": "success", "user_added": ok_to_share }), 200
 
+# hacemos llamado a la tabla admin para registrar un admin nuevo
 @api.route('/admin', methods=['POST'])
 def admin():    
     email = request.json.get('email')
@@ -236,7 +228,7 @@ def admin():
 
     return jsonify({"msg": "success", "added": ok_to_share }), 200
 
-
+# hacemos un llamado a la tabla user para que el usuario se pueda logear correctamente
 @api.route('/login', methods=['POST'])
 def get_token():
     
@@ -253,8 +245,8 @@ def get_token():
             return jsonify({"msg": "email don't exist"}), 404
 
        
-        password_from_db = email_from_db.password
-        true_o_false = bcrypt.check_password_hash(password_from_db, password)
+        password_from_db = email_from_db.password # traemos la contraseña del usuario del request body 
+        true_o_false = bcrypt.check_password_hash(password_from_db, password) #verificamos que las contraseñas coincidan
 
         if not true_o_false:
              return jsonify({"msg": "Incorrect password"}), 401
@@ -270,7 +262,7 @@ def get_token():
                 "role": email_from_db.role,
                 "payment_state": email_from_db.pay,
                 
-                }), 200
+                }), 200 # si todo esta correcto retornamos un objeto con el jwt token en el 
         
 @api.route('/log', methods=['POST'])
 def get_token_admin():
@@ -331,6 +323,7 @@ def get_token_trainer():
     except Exception as e:
         return {"error": f"this email not exist: {str(e)}"}, 400
 
+#hacemos un llamado a la base datos para que compruebe que el token esta correcto y el usuario pueda tener acceso a las vistas privadas
 @api.route('/private')
 @jwt_required()
 def private_data():
@@ -380,9 +373,9 @@ def admin_private_data():
     else:
         return jsonify({"msg": 'token no valido o inexistente'}), 401
     
-
+# hacemos un llamado a la tabla admins para traer las credencias nesecesarias para recivir pagos 
 @api.route('/get/api/info')
-@jwt_required()
+@jwt_required() # volvemos la vista privada para que personas sin autorizacion no puedan tener accesso a los datos
 def admin_api_paypal_info():
     admin_id = get_jwt_identity()
     admin_query = Admins.query.get(admin_id)
@@ -399,7 +392,7 @@ def admin_api_paypal_info():
         return jsonify({"msg": 'token no valido o inexistente'}), 401
 
 
-    
+# hacemos un llamado a las tablas diets, routines, user, (para poder borrar el usuario hay que borrar su rutina y su dieta asociada)
 @api.route('/user/delete/<int:id>', methods=['DELETE'])
 def delete_user(id):
 
@@ -487,7 +480,7 @@ def create_trainer():
         }
     
     return jsonify(ok_to_share), 200
-
+#hacemos un llamado a la tabla rutinas
 @api.route('/assign/routine', methods=['POST'])
 @jwt_required()
 def assign_routine():
@@ -499,7 +492,7 @@ def assign_routine():
     legs = request.json.get('legs')
     id_user = request.json.get('id_user')
 
-    user_from_db = Routines.query.filter_by(id_user = id_user).first()
+    user_from_db = Routines.query.filter_by(id_user = id_user).first() 
 
     if not chest or not shoulders or not arms or not legs:
         return jsonify({'msg': 'fill all inputs'}), 400    
@@ -517,8 +510,10 @@ def assign_routine():
         )
     db.session.add(new_routine)
     db.session.commit()
-    return jsonify({'msg': 'success'}), 200
+    return jsonify({'msg': 'success'}), 200 # si todo esta correcto agregamos una rutina asignada a la persona 
 
+
+#hacemos una llamada a las tablas rutinas, user
 @api.route('/get/routine', methods=['GET'])
 @jwt_required()
 def get_one_routine_user():

@@ -28,6 +28,7 @@ export const SignUp = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [password2, setPassword2] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [msg, setMsg] = useState("")
@@ -40,7 +41,14 @@ export const SignUp = () => {
         if (password.length < 6 || !emailInput.includes("@gmail.com") || emailInput.length < 11 || lastName.length < 3 || firstName.length < 3) {
             setMsg("The password or email does not meet the registration requirements.")
 
-        } else {
+        } if (password !== password2){
+            setTimeout(() => { setMsg("") }, 10000)
+            return setMsg("Passwords do not match")
+            
+        }
+        
+        
+        else {
 
             let newUser = {
                 email: emailInput,
@@ -58,7 +66,6 @@ export const SignUp = () => {
             setPassword('')
             setFirstName('')
             setLastName('')
-
 
         }
     }
@@ -105,6 +112,11 @@ export const SignUp = () => {
                 <div className={style.custom_form_item}>
                     <label className={style.custom_label} htmlFor="password">Password</label>
                     <input type="password" className={`${style.custom_input} text-center`} id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </div>
+
+                <div className={style.custom_form_item}>
+                    <label className={style.custom_label} htmlFor="password">Cofirm Password</label>
+                    <input type="password" className={`${style.custom_input} text-center`} id="password" placeholder="Confirm Password" value={password2} onChange={(e) => setPassword2(e.target.value)} />
                 </div>
 
                 <button type="button" className={style.custom_btn} onClick={() => sendForm()}>Click here to sign up now!</button>

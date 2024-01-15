@@ -45,7 +45,7 @@ export const Navbar_User = () => {
                             </li>
                             <li className="nav-item">
                                 <Link to="/user/calculate" className="nav-link">
-                                    Calculies calculator
+                                    Calories calculator
                                 </Link>
                             </li>
                             <li className="nav-item">

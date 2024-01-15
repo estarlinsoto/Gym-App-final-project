@@ -66,13 +66,13 @@ export const CaloriesCalculator = () => {
                     {message.length == 0 ? "" : <div class="alert alert-danger" role="alert">{message}</div>}
 
                     <select className="form-select form-select-lg mb-3" onChange={(e) => setGenderValue(e.target.value)}>
-                        <option selected value={0}>Select your gender</option>
+                        <option selected value={0}>Gender</option>
                         <option value={"male"} >Male</option>
                         <option value={"female"} >Female</option>
                     </select>
 
                     <select className="form-select form-select-lg mb-3" onChange={(e) => setActivityValue(e.target.value)}>
-                        <option selected value={0} >Select your physical activity</option>
+                        <option selected value={0} >Physical activity</option>
                         <option value={1.2}  >Sedentary</option>
                         <option value={1.375}  >Exercise 1-3 times/week</option>
                         <option value={1.55} >Exercise 4-5 times/week</option>
@@ -95,7 +95,7 @@ export const CaloriesCalculator = () => {
                         <label for="floatingPassword">Age</label>
                     </div>
 
-                    <button type="button" className="btn btn-secondary m-3 p-2 w-25" onClick={() => calculate()} ><b>Calculate</b></button>
+                    <button type="button" className="btn btn-secondary m-3 p-2 w-50" onClick={() => calculate()} ><b>Calculate</b></button>
 
 
                     {result == 0 ? "" :
