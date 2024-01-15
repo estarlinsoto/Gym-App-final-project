@@ -56,6 +56,8 @@ export const SignUp = () => {
             actions.createNewUser(newUser)
             setEmail('')
             setPassword('')
+            setFirstName('')
+            setLastName('')
 
 
         }

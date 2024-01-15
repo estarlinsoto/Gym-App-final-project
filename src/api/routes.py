@@ -124,8 +124,18 @@ def get_routine(id_user):
 
     }), 200
 
-
-
+@api.route('/get/pay/<string:email>', methods=['GET'])
+def get_payment_id(email):
+    
+    query_payment = User.query.filter_by(email = email).first()
+    
+    if not query_payment:
+        return jsonify({'msg': ' id payment not exist'}), 200
+    
+    if query_payment.pay == 'success':
+        return jsonify({ 'msg': 'success' }), 200
+  
+    return jsonify({'msg': 'payment not success yet'}), 200
 
 @api.route('/all/trainers')
 @jwt_required()

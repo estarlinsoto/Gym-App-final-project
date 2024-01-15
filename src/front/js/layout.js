@@ -21,6 +21,7 @@ import { SignUp } from "./pages/SignUp.jsx";
 import { UserRoutines } from "./pages/UserRoutines.jsx";
 import { UserDiet } from "./pages/UserDiet.jsx";
 import { AdminSignUp } from "./pages/AdminSignUp.jsx";
+import { ConfirmPayment } from "../../views/ConfirmPayment.jsx";
 
 
 
@@ -54,7 +55,9 @@ const Layout = () => {
                         <Route element={<TrainerAssignRoutine />} path="/trainer/assignroutine" />   
                         <Route element={<TrainerAssignDiet />} path="/trainer/assigndiet" />   
                         <Route element={<CaloriesCalculator />} path="/user/calculate" />    
+                        <Route element={<ConfirmPayment />} path="/user/confirm/payment" />    
                         <Route element={<h1>Not found!</h1>} path="/*"  />
+
                     </Routes>
                     <Footer />
                 </ScrollToTop>

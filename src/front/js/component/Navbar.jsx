@@ -12,7 +12,7 @@ export const Navbar = () => {
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-black">
                 <div className={` container-fluid`}>
-                    <Link to="/trainer" className="navbar-brand">
+                    <Link to="/home" className="navbar-brand">
                         <a id={style.navbar__logo}><i id={style.navbar__logo} className="fa-solid fa-dumbbell"></i>_GYMApp</a>
                     </Link>
                     <button

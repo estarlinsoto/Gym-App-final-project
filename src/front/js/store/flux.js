@@ -30,7 +30,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			newUser: "",
 			suscriptioId: "",
 			getUser: "",
-			editUserRes: ""
+			editUserRes: "",
+			paymentIdRes: ""
 
 		},
 		actions: {
@@ -64,7 +65,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					newUser: "",
 					suscriptioId: "",
 					getUser: "",
-					editUserRes: ""
+					editUserRes: "",
+					paymentIdRes: ""
 				});
 
 
@@ -228,7 +230,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						})
 						.then((json) => {
 							setStore({ store: store.newUserRes = "success" })
-							console.log(json.user_added.client)
+							//console.log(json.user_added.client)
 							setStore({ store: store.client = json.user_added.client })
 							setStore({ store: store.secret = json.user_added.secret })
 
@@ -285,7 +287,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then((json) => store.privateRes = json.msg)
 				setStore({ store: store.privateRes })
-				console.log(privateRes)
+				//console.log(privateRes)
 			},
 			privateViewRequestTrainer: async () => {
 
@@ -341,7 +343,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							return res.json()
 						} else {
 							setStore({ store: store.privateRes = true })
-							console.log(store.adminUserData)
+							//console.log(store.adminUserData)
 							throw Error(res.statusText)
 						}
 					})
@@ -769,12 +771,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ store: store.redirectToPaypal = json.links[0].href })
 						setStore({ store: store.suscriptioId = json.id })
 						actions.sendEmail()
-						console.log(json)
+						//console.log(json)
 					})
 			},
 
 			sendEmail: async () => {
 				const store = getStore()
+				localStorage.setItem('email', store.newUser.email)
 				await fetch(`${process.env.BACKEND_URL}/api/payment/update`, {
 					body: JSON.stringify({
 						email: store.newUser.email,
@@ -786,7 +789,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 				})
 					.then((res) => res.json())
-					.then((json) => console.log(json))
+					.then((json) => json)
 			},
 			editUser: async (user) => {
 				const store = getStore()
@@ -800,6 +803,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				})
 					.then((res) => res.json())
 					.then((json) => setStore({ store: store.editUserRes = json.msg }))
+			},
+			get_payment: async () => {
+				const store = getStore()
+				setStore({ store: store.paymentIdRes = "" })
+				await fetch(`${process.env.BACKEND_URL}/api/get/pay/${localStorage.getItem('email')}`, {})
+					.then((res) => {
+						if (res.status == 200) {
+							return res.json()
+						} else {
+							throw Error(res.statusText)
+						}
+					})
+					.then((json) => setStore({ store: store.paymentIdRes = json.msg }))
+				//console.log(store.paymentIdRes)
+				//console.log(localStorage.getItem('email'))
+
 			},
 
 

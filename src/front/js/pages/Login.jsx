@@ -10,7 +10,7 @@ export const Login = () => {
     const [userEmail, setUserEmail] = useState("");
     const [password, setPassword] = useState("");
     const [msg, setMsg] = useState("");
-
+    const [redirectMsg, setRedirectMsg] = useState("");
 
     const sendLoginForm = () => {
         if (password.length < 6 || !userEmail.includes("@gmail.com") || userEmail.length < 11) {
@@ -35,8 +35,7 @@ export const Login = () => {
         }
 
         if (store.loginRes == "user not pay, redirecting to paypal") {
-            setTimeout(() => { setMsg("") }, 10000)
-            setMsg("user not pay, redirecting to paypal")
+            setRedirectMsg("User not pay, redirecting to paypal...")
         }
 
         if (store.loginRes == "this email is not registered") {
@@ -62,8 +61,19 @@ export const Login = () => {
                 <p>Welcome to your best workout</p>
             </div>
             <div className={style.form_container}>
-                {msg.length == 0 ? "" : <div class="alert alert-danger" role="alert">{msg}</div>}
+
+
                 <div className={style.form_floating}>
+                    {msg.length == 0 ? "" : <div class="alert alert-danger" role="alert">{msg}</div>}
+                    {redirectMsg.length == 0 ? "" :
+                        <div class="alert alert-warning" role="alert">
+                            User not pay, redirecting to paypal...
+                            <div className="spinner-border text-light mx-2" role="status">
+                            </div>
+                        </div>
+
+
+                    }
                     <label>Email address</label>
                     <input type="email" className={style.form_control} id="email" placeholder="example@gmail.com" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
 
