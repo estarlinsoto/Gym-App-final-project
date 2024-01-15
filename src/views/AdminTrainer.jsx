@@ -43,6 +43,7 @@ export const AdminTrainer = () => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [password2, setPassword2] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [msg, setMsg] = useState("")
@@ -58,6 +59,10 @@ export const AdminTrainer = () => {
             setAlertColor("alert alert-danger")
             setTimeout(() => { setMsg("") }, 5000)
 
+        } if (password !== password2) {
+            setAlertColor("alert alert-danger")
+            setTimeout(() => { setMsg("") }, 10000)
+            return setMsg("Passwords do not match")
 
         } else {
 
@@ -75,6 +80,7 @@ export const AdminTrainer = () => {
 
             actions.createNewTrainer(newTrainer)
             setEmail('')
+            setPassword('')
             setPassword('')
             setFirstName('')
             setLastName('')
@@ -122,6 +128,11 @@ export const AdminTrainer = () => {
                                             <div className="form-floating mb-3">
                                                 <input type="password" className="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} ></input>
                                                 <label for="floatingPassword">Password</label>
+                                            </div>
+
+                                            <div className="form-floating mb-3">
+                                                <input type="password" className="form-control" placeholder="Password" value={password2} onChange={(e) => setPassword2(e.target.value)} ></input>
+                                                <label for="floatingPassword">Confirm Password</label>
                                             </div>
 
                                             <button type="button" className="btn btn-success w-100 py-2" onClick={() => sendForm()}>Add new trainer</button>

@@ -41,14 +41,11 @@ export const SignUp = () => {
         if (password.length < 6 || !emailInput.includes("@gmail.com") || emailInput.length < 11 || lastName.length < 3 || firstName.length < 3) {
             setMsg("The password or email does not meet the registration requirements.")
 
-        } if (password !== password2){
+        } if (password !== password2) {
             setTimeout(() => { setMsg("") }, 10000)
             return setMsg("Passwords do not match")
-            
-        }
-        
-        
-        else {
+
+        } else {
 
             let newUser = {
                 email: emailInput,
@@ -64,6 +61,7 @@ export const SignUp = () => {
             actions.createNewUser(newUser)
             setEmail('')
             setPassword('')
+            setPassword2('')
             setFirstName('')
             setLastName('')
 
