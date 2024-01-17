@@ -1,7 +1,9 @@
 import React from 'react'
 import style from '../../src/front/styles/Admin.module.css'
-import {Navbar_Admin} from '../front/js/component/Navbar_Admin.jsx'
+import { Navbar_Admin } from '../front/js/component/Navbar_Admin.jsx'
 import { Link } from 'react-router-dom'
+
+
 
 
 const Admin = () => {

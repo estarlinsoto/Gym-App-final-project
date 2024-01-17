@@ -9,18 +9,30 @@ export const SignUp = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (store.newUserRes == "success") {
-            navigate('/login')
-        }
-        setMsg(store.newUserRes)
 
-    }, [store.newUserRes])
+        if (store.newUserRes == "success") {
+            setMsg('')
+            setPaypalMsg('success')
+        }
+        if (store.newUserRes == "Email already exists.") {
+            setMsg("Email already exists.")
+            setTimeout(() => { setMsg("") }, 10000)
+        }
+        if (store.redirectToPaypal.length > 0) {
+            setTimeout(() => navigate(window.location.href = store.redirectToPaypal), 5000)
+
+
+        }
+
+    }, [store.newUserRes, store.redirectToPaypal.length])
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [password2, setPassword2] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [msg, setMsg] = useState("")
+    const [paypalMsg, setPaypalMsg] = useState("")
 
     const sendForm = () => {
         let emailInput = email
@@ -29,6 +41,10 @@ export const SignUp = () => {
         if (password.length < 6 || !emailInput.includes("@gmail.com") || emailInput.length < 11 || lastName.length < 3 || firstName.length < 3) {
             setMsg("The password or email does not meet the registration requirements.")
 
+        } if (password !== password2) {
+            setTimeout(() => { setMsg("") }, 10000)
+            return setMsg("Passwords do not match")
+
         } else {
 
             let newUser = {
@@ -36,16 +52,18 @@ export const SignUp = () => {
                 password: password,
                 first_name: firstName,
                 last_name: lastName,
-                pathologies: "pathologiesgdfg",
-                date_of_birth: "1151515",
-                role: "admin"
+                pathologies: "xxxxxxxx",
+                date_of_birth: "xxxxxxx",
+                role: "user"
 
             }
 
             actions.createNewUser(newUser)
             setEmail('')
             setPassword('')
-
+            setPassword2('')
+            setFirstName('')
+            setLastName('')
 
         }
     }
@@ -62,7 +80,17 @@ export const SignUp = () => {
                 </Link>
                 <h1>Sign Up Now</h1>
 
-                {msg.length === 0 ? "" : <div className="alert alert-danger" role="alert">{msg}</div>}
+                {msg.length === 0 ? "" : <div className="alert alert-danger w-100" role="alert">{msg}</div>}
+
+                {paypalMsg.length === 0 ? "" :
+                    <div >
+                        <div className="alert alert-success w-100 d-flex" role="alert"><h2>Redirecting to paypal, wait a minute...</h2>
+                            <div className="spinner-border text-light" role="status">
+                            </div>
+                        </div>
+                    </div>
+                }
+
 
                 <div className={style.custom_form_item}>
                     <label className={style.custom_label} htmlFor="firstName">First Name</label>
@@ -82,6 +110,11 @@ export const SignUp = () => {
                 <div className={style.custom_form_item}>
                     <label className={style.custom_label} htmlFor="password">Password</label>
                     <input type="password" className={`${style.custom_input} text-center`} id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                </div>
+
+                <div className={style.custom_form_item}>
+                    <label className={style.custom_label} htmlFor="password">Cofirm Password</label>
+                    <input type="password" className={`${style.custom_input} text-center`} id="password" placeholder="Confirm Password" value={password2} onChange={(e) => setPassword2(e.target.value)} />
                 </div>
 
                 <button type="button" className={style.custom_btn} onClick={() => sendForm()}>Click here to sign up now!</button>

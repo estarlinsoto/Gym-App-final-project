@@ -1,50 +1,65 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import style from "../../styles/Navbar_User.module.css"
 import { useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext.js";
+import style from "../../styles/Navbar_Admin.module.css"
 
 export const Navbar_User = () => {
-
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    return (
 
+    return (
         <div>
-            <nav className={style.navbar}>
-                <div className={style.navbar__container}>
-                    <Link to="/user" className={style.link}>
-                        <a id={style.navbar__logo}><i className="fa-solid fa-dumbbell"></i>_GYMApp</a>
+            <nav className="navbar navbar-expand-lg navbar-dark bg-black">
+                <div className={` container-fluid`}>
+                    <Link to="/user" className="navbar-brand">
+                        <a id={style.navbar__logo}><i id={style.navbar__logo} className="fa-solid fa-dumbbell"></i>_GYMApp</a>
                     </Link>
-                    <div className={style.navbar__toggle} id={style.mobile_menu}>
-                        <span className={style.bar}></span>
-                        <span className={style.bar}></span>
-                        <span className={style.bar}></span>
-                    </div>
-                    <ul className={style.navbar__menu}>
-                        <li className={style.nabvar__item}>
-                            <Link to="/user/routines" className={style.link}>
-                                <a className={style.navbar__links}>Routines</a>
-                            </Link>
-                        </li>
-                        <li className={style.navbar__item}>
-                            <Link to="/user/diets" className={style.link}>
-                                <a className={style.navbar__links}>Diets</a>
-                            </Link>
-                        </li>
-                        <li className={style.item}>
-                            <Link to="/user/progress" className={style.link}>
-                                <a className={style.navbar__links}>Progress</a>
-                            </Link>
-                        </li>
-                        <Link to="/home" className={style.link}>
-                            <li className={style.nabvar__btn}>
-                                <button href="/" className={style.button} onClick={() => navigate('/home')} >Logout</button>
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav"
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse text-center" id="navbarNav">
+                        <ul className="navbar-nav ms-auto">
+                            <li className="nav-item">
+                                <Link to="/user" className="nav-link">
+                                    Home
+                                </Link>
                             </li>
-                        </Link>
-                    </ul>
+                            <li className="nav-item">
+                                <Link to="/user/routine" className="nav-link">
+                                    Your Routine
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to="/user/diet" className="nav-link">
+                                    Your Diet
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to="/user/calculate" className="nav-link">
+                                    Calories calculator
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <button
+                                    className="btn btn-outline-light mx-3 p-2"
+                                    onClick={() => { actions.logout(); navigate('/home'); }}
+                                >
+                                    Logout
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </div>
     );
 };
-
-export default Navbar_User

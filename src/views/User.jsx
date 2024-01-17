@@ -13,7 +13,7 @@ const User = () => {
     useEffect(() => {
 
         actions.privateViewRequest()
-        if(store.privateRes === true || sessionStorage.access_token == ""){
+        if (store.privateRes === true || sessionStorage.access_token == "") {
             navigate('/')
         }
 
@@ -21,8 +21,8 @@ const User = () => {
 
     return (
         <div>
-            <Navbar_User />
-            
+            {store.privateRes !== "success" ? <div className="spinner-border" role="status"></div> : <div>
+                <Navbar_User />
                 <div className={style.main}>
                     <div className={style.main__container}>
 
@@ -32,7 +32,7 @@ const User = () => {
                             <p>Checkout your daily routines and diet.</p>
 
                         </div>
-                        <div className={style.main__img__container}>
+                        <div className={style.main__img}>
                             <video autoPlay loop muted playsInline className={style.main__video__container}>
                                 <source src="https://player.vimeo.com/external/456109483.sd.mp4?s=d7a63dff668ee01dc30fff844811fc751df40e5f&profile_id=165&oauth2_token_id=57447761" />
                             </video>
@@ -63,7 +63,7 @@ const User = () => {
                         </div>
                     </div>
                 </div>
-            
+            </div>}
         </div>
     )
 }
