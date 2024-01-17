@@ -1,7 +1,9 @@
 import React from 'react'
 import style from '../../src/front/styles/Home.module.css'
 import { Navbar } from '../front/js/component/Navbar.jsx'
+
 import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -11,6 +13,7 @@ const Home = () => {
 
         <div className=''>
             <Navbar />
+
 
 
             <div className={style.main}>
@@ -51,6 +54,7 @@ const Home = () => {
                         <h2>Transform Yourself</h2>
                         <p>Get Motivated</p>
                         <button onClick={() => navigate('/signup')}>Get Started</button>
+
                     </div>
                 </div>
             </div>

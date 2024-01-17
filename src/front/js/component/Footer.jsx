@@ -76,6 +76,7 @@ export const Footer = () => (
                         <a>LinkedIn</a></Link>
                 </div>
             </div>
+ 
         </div>
         <div className={style.social__media}>
             <div className={style.social__media__wrap}>
@@ -87,6 +88,7 @@ export const Footer = () => (
                 <p className={style.website__rights}><i class="fa-solid fa-copyright"></i>GYMApp 2024. All rights reserved</p>
                 <div className={style.social__icons}>
                     <Link to="facebook">
+
                         <a className={style.social__icon__link} target="_blank">
                             <i className="fa-brands fa-facebook fs-1"></i>
                         </a>

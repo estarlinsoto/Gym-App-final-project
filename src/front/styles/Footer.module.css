@@ -37,6 +37,7 @@
     /* color: white; */
     display: flex;
     justify-content: center;
+    margin-left: 50px;
 }
 
 .footer__link__wrapper {
